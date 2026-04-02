@@ -1,0 +1,338 @@
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { ProductService } from '../../services/product.service';
+import { CartService } from '../../services/cart.service';
+import { Product } from '../../models/product.model';
+import { ProductCardComponent } from '../../components/product-card/product-card.component';
+import { QuoteCardComponent } from '../../components/quote-card/quote-card.component';
+
+@Component({
+  selector: 'app-product-detail',
+  standalone: true,
+  imports: [RouterLink, MatIconModule, ProductCardComponent, QuoteCardComponent],
+  template: `
+    <div class="min-h-screen bg-white py-12">
+      @if (product()) {
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <!-- Breadcrumbs -->
+          <nav class="flex text-sm text-gray-500 mb-8">
+            <a routerLink="/" class="hover:text-gray-900">Home</a>
+            <span class="mx-2">/</span>
+            <a routerLink="/shop" class="hover:text-gray-900">Shop</a>
+            <span class="mx-2">/</span>
+            <span class="text-gray-900">{{ product()?.name }}</span>
+          </nav>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            
+            <!-- Left Column: Typography/Artistic Representation instead of Image -->
+            <div class="lg:col-span-5 relative">
+              <div class="sticky top-28 bg-gray-50 aspect-[4/5] flex items-center justify-center p-8 border border-gray-100">
+                <div class="absolute inset-0 bg-gradient-to-br from-transparent to-gray-100/50"></div>
+                <div class="text-center relative z-10">
+                  <!-- Background Watermark Image -->
+                  <img src="https://ais-pre-t7gjcw6mcpay6ihwkb46i4-306586258974.europe-west2.run.app/api/attachments/1LkvJAAUDEmd09bRMB7nSKnOsxHsRaRNH" 
+                       class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] max-w-none h-[150%] object-contain opacity-[0.08] -z-10 pointer-events-none"
+                       referrerpolicy="no-referrer"
+                       alt="">
+                  
+                  <p class="text-xs uppercase tracking-[0.3em] text-gray-400 mb-4">{{ product()?.brand }}</p>
+                  <h1 class="text-4xl md:text-5xl font-serif text-gray-900 leading-tight">{{ product()?.name }}</h1>
+                  <div class="w-12 h-px bg-gold-400 mx-auto mt-8 mb-8"></div>
+                  <p class="text-sm text-gray-500 italic font-serif">{{ product()?.olfactoryFamily }}</p>
+                </div>
+                
+                <!-- Decorative corner accents -->
+                <div class="absolute top-4 left-4 w-4 h-4 border-t border-l border-gray-300"></div>
+                <div class="absolute top-4 right-4 w-4 h-4 border-t border-r border-gray-300"></div>
+                <div class="absolute bottom-4 left-4 w-4 h-4 border-b border-l border-gray-300"></div>
+                <div class="absolute bottom-4 right-4 w-4 h-4 border-b border-r border-gray-300"></div>
+              </div>
+            </div>
+
+            <!-- Right Column: Details -->
+            <div class="lg:col-span-7">
+              <div class="mb-8">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="text-xs font-medium px-2.5 py-1 bg-gray-100 text-gray-800 uppercase tracking-wider">{{ product()?.gender }}</span>
+                  <span class="text-xs font-medium px-2.5 py-1 bg-gray-100 text-gray-800 uppercase tracking-wider">{{ product()?.category }}</span>
+                </div>
+                <h2 class="text-3xl font-serif font-bold text-gray-900 mb-2">{{ product()?.name }}</h2>
+                <p class="text-lg text-gray-600 mb-6">by {{ product()?.brand }} <span class="text-gray-400 text-sm ml-2">(Created {{ product()?.year }})</span></p>
+                
+                <div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-8">
+                  <div class="flex items-start gap-3 mb-4">
+                    <mat-icon class="text-gold-500 mt-0.5" style="font-size: 20px; width: 20px; height: 20px;">info</mat-icon>
+                    <p class="text-sm text-gray-600 leading-relaxed">
+                      <strong class="text-gray-900">Note:</strong> We craft high-quality impressions of designer fragrances. You are purchasing our expertly blended impression, not the original designer product.
+                    </p>
+                  </div>
+                  <div class="flex items-baseline gap-6 pt-4 border-t border-gray-200">
+                    <div>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500 block mb-1">Impression Price</span>
+                      <span class="text-4xl font-light text-gray-900">{{ product()?.impressionPrice }} AED</span>
+                    </div>
+                    <div>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 block mb-1">Original Price</span>
+                      <span class="text-lg text-gray-400 line-through">{{ product()?.originalPrice }} AED</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                  <button (click)="addToCart()" class="flex-1 bg-gray-900 text-white px-8 py-4 text-sm font-medium uppercase tracking-wider hover:bg-gray-800 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2">
+                    <mat-icon style="font-size: 18px; width: 18px; height: 18px;">shopping_bag</mat-icon>
+                    Add to Cart
+                  </button>
+                  <button (click)="orderViaWhatsApp()" class="flex-1 bg-green-600 text-white px-8 py-4 text-sm font-medium uppercase tracking-wider hover:bg-green-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2">
+                    <mat-icon style="font-size: 18px; width: 18px; height: 18px;">chat</mat-icon>
+                    Order via WhatsApp
+                  </button>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200 pt-8 mb-8">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">The Scent Profile</h3>
+                <div class="p-6 sm:p-8 rounded-2xl border shadow-sm relative overflow-hidden bg-gradient-to-br" [class]="scentProfileTheme().container">
+                  <div class="absolute -right-4 -bottom-4 transform -rotate-12" [class]="scentProfileTheme().bgIcon">
+                    <mat-icon style="font-size: 140px; width: 140px; height: 140px;">water_drop</mat-icon>
+                  </div>
+                  <div class="relative z-10">
+                    <p class="text-gray-800 leading-relaxed mb-6 text-lg font-serif italic">"{{ product()?.comment }}"</p>
+                    
+                    <div class="bg-white/60 backdrop-blur-sm p-5 rounded-xl border border-white/80 mb-6">
+                      <div class="flex items-center gap-2 mb-2">
+                        <mat-icon style="font-size: 20px; width: 20px; height: 20px;" [class]="scentProfileTheme().keyNotesIcon">spa</mat-icon>
+                        <h4 class="text-xs font-bold uppercase tracking-widest" [class]="scentProfileTheme().keyNotesTitle">Key Notes</h4>
+                      </div>
+                      <p class="text-gray-900 font-medium text-lg">{{ product()?.keyNotes }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6">
+                      <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Olfactory Family</h4>
+                        <p class="text-gray-900 font-medium">{{ product()?.olfactoryFamily }}</p>
+                      </div>
+                      <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Perfumer</h4>
+                        <p class="text-gray-900 font-medium">{{ product()?.perfumer }}</p>
+                      </div>
+                      <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Longevity</h4>
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold" [class]="scentProfileTheme().longevityBadge">
+                          {{ product()?.longevity }}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Sillage</h4>
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold" [class]="scentProfileTheme().sillageBadge">
+                          {{ product()?.sillage }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200 pt-8 mb-8">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">When & Where</h3>
+                <div class="bg-gradient-to-br from-sky-50 to-indigo-50 p-6 sm:p-8 rounded-2xl border border-sky-100 shadow-sm relative overflow-hidden">
+                  <div class="absolute -right-4 -bottom-4 text-sky-500/10 transform rotate-12">
+                    <mat-icon style="font-size: 140px; width: 140px; height: 140px;">explore</mat-icon>
+                  </div>
+                  <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <div class="flex items-center gap-2 mb-2">
+                        <mat-icon class="text-sky-600" style="font-size: 20px; width: 20px; height: 20px;">wb_sunny</mat-icon>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-sky-800">Season</h4>
+                      </div>
+                      <p class="text-lg font-medium text-gray-900">{{ product()?.whenToWear }}</p>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2 mb-2">
+                        <mat-icon class="text-indigo-500" style="font-size: 20px; width: 20px; height: 20px;">event_seat</mat-icon>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-800">Best Occasion</h4>
+                      </div>
+                      <p class="text-lg font-medium text-gray-900">{{ product()?.bestOccasion }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200 pt-8 mb-8">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">The Persona</h3>
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-6 sm:p-8 rounded-2xl border border-amber-100 shadow-sm relative overflow-hidden">
+                  <!-- Decorative background element -->
+                  <div class="absolute -right-4 -bottom-4 text-amber-500/10 transform -rotate-12">
+                    <mat-icon style="font-size: 140px; width: 140px; height: 140px;">fingerprint</mat-icon>
+                  </div>
+                  
+                  <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <div>
+                      <div class="flex items-center gap-2 mb-2">
+                        <mat-icon class="text-amber-600" style="font-size: 20px; width: 20px; height: 20px;">work_outline</mat-icon>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-amber-800">Ideal For</h4>
+                      </div>
+                      <p class="text-xl font-serif text-gray-900 leading-tight">{{ product()?.profession }}</p>
+                    </div>
+                    <div>
+                      <div class="flex items-center gap-2 mb-2">
+                        <mat-icon class="text-orange-500" style="font-size: 20px; width: 20px; height: 20px;">auto_awesome</mat-icon>
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-orange-800">Vibe</h4>
+                      </div>
+                      <p class="text-lg text-gray-800 font-medium leading-snug">{{ product()?.persona }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200 pt-8 mb-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <!-- Pros -->
+                  <div class="bg-gradient-to-br from-emerald-50 to-teal-50 p-6 sm:p-8 rounded-2xl border border-emerald-100 shadow-sm relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 text-emerald-500/10 transform -rotate-12">
+                      <mat-icon style="font-size: 120px; width: 120px; height: 120px;">thumb_up</mat-icon>
+                    </div>
+                    <div class="relative z-10">
+                      <h3 class="text-sm font-bold uppercase tracking-widest text-emerald-900 mb-4 flex items-center gap-2">
+                        <mat-icon class="text-emerald-600" style="font-size: 20px; width: 20px; height: 20px;">check_circle</mat-icon> Pros
+                      </h3>
+                      <ul class="space-y-3">
+                        @for (pro of product()?.pros; track pro) {
+                          <li class="text-base text-emerald-950 font-medium flex items-start gap-2">
+                            <span class="text-emerald-500 mt-0.5">•</span> {{ pro }}
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Cons -->
+                  <div class="bg-gradient-to-br from-rose-50 to-red-50 p-6 sm:p-8 rounded-2xl border border-rose-100 shadow-sm relative overflow-hidden">
+                    <div class="absolute -right-4 -bottom-4 text-rose-500/10 transform rotate-12">
+                      <mat-icon style="font-size: 120px; width: 120px; height: 120px;">thumb_down</mat-icon>
+                    </div>
+                    <div class="relative z-10">
+                      <h3 class="text-sm font-bold uppercase tracking-widest text-rose-900 mb-4 flex items-center gap-2">
+                        <mat-icon class="text-rose-600" style="font-size: 20px; width: 20px; height: 20px;">cancel</mat-icon> Cons
+                      </h3>
+                      <ul class="space-y-3">
+                        @for (con of product()?.cons; track con) {
+                          <li class="text-base text-rose-950 font-medium flex items-start gap-2">
+                            <span class="text-rose-500 mt-0.5">•</span> {{ con }}
+                          </li>
+                        }
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Similar Perfumes Section -->
+              @if (similarProducts().length > 0) {
+                <div class="border-t border-gray-200 pt-12">
+                  <h3 class="text-2xl font-serif font-bold text-gray-900 mb-6">Similar Perfumes</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @for (similarProduct of similarProducts(); track similarProduct.id; let i = $index) {
+                      <app-product-card 
+                        [product]="similarProduct" 
+                        [rank]="i === 0 ? 'gold' : (i === 1 ? 'silver' : 'bronze')">
+                      </app-product-card>
+                    }
+                  </div>
+                </div>
+              }
+
+              <app-quote-card></app-quote-card>
+
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="max-w-7xl mx-auto px-4 py-24 text-center">
+          <h2 class="text-2xl font-serif text-gray-900 mb-4">Product not found</h2>
+          <a routerLink="/shop" class="text-gold-600 hover:text-gold-700 underline">Return to Shop</a>
+        </div>
+      }
+    </div>
+  `
+})
+export class ProductDetailComponent implements OnInit {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private productService = inject(ProductService);
+  private cartService = inject(CartService);
+
+  product = signal<Product | undefined>(undefined);
+  similarProducts = signal<Product[]>([]);
+
+  scentProfileTheme = computed(() => {
+    const gender = this.product()?.gender;
+    if (gender === 'Female') {
+      return {
+        container: 'from-pink-100 to-rose-100 border-pink-200',
+        bgIcon: 'text-pink-500/20',
+        keyNotesIcon: 'text-pink-600',
+        keyNotesTitle: 'text-pink-900',
+        gridTitle: 'text-pink-900',
+        longevityBadge: 'bg-pink-200 text-pink-900',
+        sillageBadge: 'bg-rose-200 text-rose-900'
+      };
+    } else if (gender === 'Male') {
+      return {
+        container: 'from-gray-100 to-slate-200 border-gray-300',
+        bgIcon: 'text-gray-500/20',
+        keyNotesIcon: 'text-gray-700',
+        keyNotesTitle: 'text-gray-900',
+        gridTitle: 'text-gray-900',
+        longevityBadge: 'bg-gray-300 text-gray-900',
+        sillageBadge: 'bg-slate-300 text-slate-900'
+      };
+    } else {
+      return {
+        container: 'from-purple-100 to-fuchsia-100 border-purple-200',
+        bgIcon: 'text-purple-500/20',
+        keyNotesIcon: 'text-purple-600',
+        keyNotesTitle: 'text-purple-900',
+        gridTitle: 'text-purple-900',
+        longevityBadge: 'bg-purple-200 text-purple-900',
+        sillageBadge: 'bg-fuchsia-200 text-fuchsia-900'
+      };
+    }
+  });
+
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        const p = this.productService.getProductById(id);
+        if (p) {
+          this.product.set(p);
+          this.similarProducts.set(this.productService.getSimilarProducts(p, 3));
+          // Scroll to top when product changes
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          this.router.navigate(['/shop']);
+        }
+      }
+    });
+  }
+
+  addToCart() {
+    const p = this.product();
+    if (p) {
+      this.cartService.addToCart(p);
+      // Optional: Show a toast notification here
+    }
+  }
+
+  orderViaWhatsApp() {
+    const p = this.product();
+    if (p) {
+      const message = `Hi, I would like to order:\n\n1x ${p.name} by ${p.brand}\nPrice: ${p.impressionPrice} AED\n\nPlease let me know the next steps.`;
+      const encodedMessage = encodeURIComponent(message);
+      window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
+    }
+  }
+}
