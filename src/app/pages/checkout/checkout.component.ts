@@ -53,6 +53,17 @@ import { CartService } from '../../services/cart.service';
             <form (ngSubmit)="onSubmit()" #checkoutForm="ngForm" class="space-y-6">
               <h2 class="text-lg font-bold uppercase tracking-widest text-gray-900 mb-4">Delivery Details</h2>
               
+              @if (errorMessage()) {
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-sm text-sm flex items-start gap-3 animate-pulse">
+                  <mat-icon class="text-red-500" style="font-size: 20px; width: 20px; height: 20px;">error_outline</mat-icon>
+                  <div>
+                    <p class="font-bold mb-1">Submission Failed</p>
+                    <p>{{ errorMessage() }}</p>
+                    <p class="mt-2 text-xs opacity-80 italic">Tip: Check your Google Sheet sharing permissions and Vercel environment variables.</p>
+                  </div>
+                </div>
+              }
+
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
@@ -143,6 +154,7 @@ export class CheckoutComponent {
 
   isSuccess = signal(false);
   isSubmitting = signal(false);
+  errorMessage = signal<string | null>(null);
 
   formData = {
     name: '',
@@ -180,6 +192,7 @@ export class CheckoutComponent {
     }
 
     this.isSubmitting.set(true);
+    this.errorMessage.set(null);
     
     // Send data to backend to save in Google Sheets
     this.http.post('/api/orders', {
@@ -194,10 +207,8 @@ export class CheckoutComponent {
       },
       error: (err) => {
         console.error('Failed to save order to Google Sheets:', err);
-        // Still set success to true for the user, but log the error
-        // Or we could show an error message. Let's show a warning but proceed.
-        this.isSuccess.set(true);
-        this.cartService.clearCart();
+        const message = err.error?.details || err.error?.error || err.message || 'An unexpected error occurred while saving your order.';
+        this.errorMessage.set(`Order Submission Error: ${message}`);
         this.isSubmitting.set(false);
       }
     });
@@ -208,6 +219,7 @@ export class CheckoutComponent {
     if (this.formData.honeypot) return;
 
     this.isSubmitting.set(true);
+    this.errorMessage.set(null);
 
     // Save to Google Sheets first
     this.http.post('/api/orders', {
@@ -220,8 +232,9 @@ export class CheckoutComponent {
       },
       error: (err) => {
         console.error('Failed to save order to Google Sheets:', err);
-        // Still proceed with WhatsApp order
-        this.finalizeWhatsAppOrder();
+        const message = err.error?.details || err.error?.error || err.message || 'An unexpected error occurred while saving your order.';
+        this.errorMessage.set(`Order Submission Error: ${message}`);
+        this.isSubmitting.set(false);
       }
     });
   }

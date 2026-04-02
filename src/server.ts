@@ -37,12 +37,16 @@ app.post('/api/orders', async (req, res) => {
     }
 
     if (!sheetId || !clientEmail || !privateKey) {
-      console.error('Missing Google Sheets configuration:', { 
-        hasSheetId: !!sheetId, 
-        hasEmail: !!clientEmail, 
-        hasKey: !!privateKey 
+      const missing = [];
+      if (!sheetId) missing.push('GOOGLE_SHEET_ID');
+      if (!clientEmail) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL');
+      if (!privateKey) missing.push('GOOGLE_PRIVATE_KEY');
+      
+      console.error('Missing Google Sheets configuration:', missing.join(', '));
+      return res.status(500).json({ 
+        error: 'Server configuration error', 
+        details: `Missing environment variables: ${missing.join(', ')}. Please check your Vercel project settings.` 
       });
-      return res.status(500).json({ error: 'Server configuration error: Missing credentials' });
     }
 
     const serviceAccountAuth = new JWT({
@@ -103,7 +107,10 @@ app.post('/api/contact', async (req, res) => {
     }
 
     if (!sheetId || !clientEmail || !privateKey) {
-      return res.status(500).json({ error: 'Server configuration error: Missing credentials' });
+      return res.status(500).json({ 
+        error: 'Server configuration error', 
+        details: 'Missing environment variables. Please check your Vercel project settings.' 
+      });
     }
 
     const serviceAccountAuth = new JWT({
