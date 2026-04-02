@@ -207,7 +207,27 @@ export class CheckoutComponent {
       },
       error: (err) => {
         console.error('Failed to save order to Google Sheets:', err);
-        const message = err.error?.details || err.error?.error || err.message || 'An unexpected error occurred while saving your order.';
+        let message = 'An unexpected error occurred.';
+        
+        try {
+          if (err.error) {
+            if (typeof err.error === 'object') {
+              const rawMessage = err.error.details || err.error.error || err.error.message;
+              message = typeof rawMessage === 'string' ? rawMessage : JSON.stringify(err.error);
+            } else if (typeof err.error === 'string') {
+              message = err.error;
+            }
+          } else {
+            message = err.message || message;
+          }
+        } catch {
+          message = 'Error parsing server response: ' + (err.message || 'Unknown error');
+        }
+
+        if (typeof message !== 'string') {
+          message = JSON.stringify(message);
+        }
+
         this.errorMessage.set(`Order Submission Error: ${message}`);
         this.isSubmitting.set(false);
       }
@@ -232,7 +252,27 @@ export class CheckoutComponent {
       },
       error: (err) => {
         console.error('Failed to save order to Google Sheets:', err);
-        const message = err.error?.details || err.error?.error || err.message || 'An unexpected error occurred while saving your order.';
+        let message = 'An unexpected error occurred.';
+        
+        try {
+          if (err.error) {
+            if (typeof err.error === 'object') {
+              const rawMessage = err.error.details || err.error.error || err.error.message;
+              message = typeof rawMessage === 'string' ? rawMessage : JSON.stringify(err.error);
+            } else if (typeof err.error === 'string') {
+              message = err.error;
+            }
+          } else {
+            message = err.message || message;
+          }
+        } catch {
+          message = 'Error parsing server response: ' + (err.message || 'Unknown error');
+        }
+
+        if (typeof message !== 'string') {
+          message = JSON.stringify(message);
+        }
+
         this.errorMessage.set(`Order Submission Error: ${message}`);
         this.isSubmitting.set(false);
       }

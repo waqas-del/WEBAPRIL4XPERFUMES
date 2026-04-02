@@ -34,6 +34,14 @@ app.post('/api/orders', async (req, res) => {
         privateKey = privateKey.substring(1, privateKey.length - 1);
       }
       privateKey = privateKey.replace(/\\n/g, '\n');
+      
+      if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+        console.error('GOOGLE_PRIVATE_KEY format seems invalid (missing header)');
+        return res.status(500).json({ 
+          error: 'Invalid Private Key', 
+          details: 'The GOOGLE_PRIVATE_KEY does not appear to be a valid PEM format key. Ensure it includes the BEGIN/END headers.' 
+        });
+      }
     }
 
     if (!sheetId || !clientEmail || !privateKey) {
@@ -81,9 +89,15 @@ app.post('/api/orders', async (req, res) => {
 
     return res.status(200).json({ success: true, orderId });
   } catch (error) {
-    const err = error as Error;
+    const err = error as { message?: string };
     console.error('Error adding order to Google Sheets:', err);
-    return res.status(500).json({ error: 'Failed to save order', details: err.message });
+    let details = 'Unknown error';
+    try {
+      details = err.message || (typeof err === 'string' ? err : JSON.stringify(err));
+    } catch {
+      details = 'Error details could not be stringified';
+    }
+    return res.status(500).json({ error: 'Failed to save order', details });
   }
 });
 
@@ -142,9 +156,15 @@ app.post('/api/contact', async (req, res) => {
 
     return res.status(200).json({ success: true });
   } catch (error) {
-    const err = error as Error;
+    const err = error as { message?: string };
     console.error('Error adding contact to Google Sheets:', err);
-    return res.status(500).json({ error: 'Failed to save contact message', details: err.message });
+    let details = 'Unknown error';
+    try {
+      details = err.message || (typeof err === 'string' ? err : JSON.stringify(err));
+    } catch {
+      details = 'Error details could not be stringified';
+    }
+    return res.status(500).json({ error: 'Failed to save contact message', details });
   }
 });
 
@@ -210,8 +230,12 @@ app.get('/api/test-sheets', async (req, res) => {
       sheets: doc.sheetCount
     });
   } catch (error) {
-    const err = error as Error;
-    return res.status(500).json({ status: 'error', message: err.message });
+    const err = error as { message?: string };
+    return res.status(500).json({ 
+      status: 'error', 
+      message: 'Test failed',
+      details: err.message || (typeof err === 'string' ? err : JSON.stringify(err))
+    });
   }
 });
 
