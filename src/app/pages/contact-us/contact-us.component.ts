@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-contact-us',
@@ -142,7 +141,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ContactUsComponent {
   private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
   
   mathChallenge = {
     a: Math.floor(Math.random() * 10) + 1,
@@ -175,26 +173,40 @@ export class ContactUsComponent {
     if (this.canSubmit) {
       this.isSubmitting = true;
       
-      this.http.post('/api/contact', this.contactForm.value).subscribe({
-        next: () => {
-          this.isSubmitted = true;
-          this.isSubmitting = false;
-          this.contactForm.reset();
-          this.generateNewChallenge();
-          
-          // Hide the success message after 5 seconds
-          setTimeout(() => {
-            this.isSubmitted = false;
-          }, 5000);
-        },
-        error: (err) => {
-          console.error('Failed to send contact message to Google Sheets:', err);
-          // Still show success to user but log error
-          this.isSubmitted = true;
-          this.isSubmitting = false;
-          this.contactForm.reset();
-          this.generateNewChallenge();
+      const formValues = this.contactForm.value;
+      const formBody = new URLSearchParams();
+      formBody.append('entry.1779450718', formValues.name || '');
+      formBody.append('entry.599073223', formValues.email || '');
+      formBody.append('entry.1885144381', formValues.phone || '');
+      formBody.append('entry.1656045276', formValues.subject || '');
+      formBody.append('entry.2069774174', formValues.message || '');
+
+      const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSex-tZ_DPfD40xo3ilHGKkVSJqmR5bDruDxwtKhUY_5GXT1zw/formResponse';
+
+      fetch(formUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formBody,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
+      }).then(() => {
+        this.isSubmitted = true;
+        this.isSubmitting = false;
+        this.contactForm.reset();
+        this.generateNewChallenge();
+        
+        // Hide the success message after 5 seconds
+        setTimeout(() => {
+          this.isSubmitted = false;
+        }, 5000);
+      }).catch(err => {
+        console.error('Failed to send contact message to Google Forms:', err);
+        // Still show success to user but log error
+        this.isSubmitted = true;
+        this.isSubmitting = false;
+        this.contactForm.reset();
+        this.generateNewChallenge();
       });
     }
   }

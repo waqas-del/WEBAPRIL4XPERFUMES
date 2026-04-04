@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { HttpClient } from '@angular/common/http';
 import { CartService } from '../../services/cart.service';
 
 @Component({
@@ -59,7 +58,6 @@ import { CartService } from '../../services/cart.service';
                   <div>
                     <p class="font-bold mb-1">Submission Failed</p>
                     <p>{{ errorMessage() }}</p>
-                    <p class="mt-2 text-xs opacity-80 italic">Tip: Check your Google Sheet sharing permissions and Vercel environment variables.</p>
                   </div>
                 </div>
               }
@@ -150,7 +148,6 @@ import { CartService } from '../../services/cart.service';
 export class CheckoutComponent {
   cartService = inject(CartService);
   private router = inject(Router);
-  private http = inject(HttpClient);
 
   isSuccess = signal(false);
   isSubmitting = signal(false);
@@ -194,43 +191,43 @@ export class CheckoutComponent {
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
     
-    // Send data to backend to save in Google Sheets
-    this.http.post('/api/orders', {
-      items: this.cartService.cartItems(),
-      details: this.formData,
-      total: this.cartService.cartTotal()
-    }).subscribe({
-      next: () => {
-        this.isSuccess.set(true);
-        this.cartService.clearCart();
-        this.isSubmitting.set(false);
-      },
-      error: (err) => {
-        console.error('Failed to save order to Google Sheets:', err);
-        let message = 'An unexpected error occurred.';
-        
-        try {
-          if (err.error) {
-            if (typeof err.error === 'object') {
-              const rawMessage = err.error.details || err.error.error || err.error.message;
-              message = typeof rawMessage === 'string' ? rawMessage : JSON.stringify(err.error);
-            } else if (typeof err.error === 'string') {
-              message = err.error;
-            }
-          } else {
-            message = err.message || message;
-          }
-        } catch {
-          message = 'Error parsing server response: ' + (err.message || 'Unknown error');
-        }
+    const itemsString = this.cartService.cartItems().map(item => `${item.quantity}x ${item.product.name}`).join('\n');
+    const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-        if (typeof message !== 'string') {
-          message = JSON.stringify(message);
-        }
+    const formBody = new URLSearchParams();
+    formBody.append('entry.1289515362', this.formData.name || '');
+    formBody.append('entry.841398653', this.formData.email || '');
+    formBody.append('entry.1068202683', this.formData.phone || '');
+    
+    let orderDetails = `Order ID: ${orderId}\n\nItems:\n${itemsString}`;
+    if (this.formData.notes) {
+      orderDetails += `\n\nNotes:\n${this.formData.notes}`;
+    }
+    formBody.append('entry.1927657256', orderDetails);
+    
+    formBody.append('entry.1147881902', this.formData.country || '');
+    formBody.append('entry.1411113354', this.formData.province || '');
+    formBody.append('entry.1980160641', this.formData.address || '');
+    formBody.append('entry.1385289147', this.cartService.cartTotal().toString());
 
-        this.errorMessage.set(`Order Submission Error: ${message}`);
-        this.isSubmitting.set(false);
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe_5eS5dX5iXRU6JvBvafqradZ5esz9d-5RrbHlUy2TSHWTBA/formResponse';
+
+    fetch(formUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formBody,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
+    }).then(() => {
+      // With no-cors, we can't read the response status, so we assume success if the fetch completes
+      this.isSuccess.set(true);
+      this.cartService.clearCart();
+      this.isSubmitting.set(false);
+    }).catch(err => {
+      console.error('Failed to save order to Google Forms:', err);
+      this.errorMessage.set(`Order Submission Error: Check your internet connection and try again.`);
+      this.isSubmitting.set(false);
     });
   }
 
@@ -241,41 +238,40 @@ export class CheckoutComponent {
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
-    // Save to Google Sheets first
-    this.http.post('/api/orders', {
-      items: this.cartService.cartItems(),
-      details: this.formData,
-      total: this.cartService.cartTotal()
-    }).subscribe({
-      next: () => {
-        this.finalizeWhatsAppOrder();
-      },
-      error: (err) => {
-        console.error('Failed to save order to Google Sheets:', err);
-        let message = 'An unexpected error occurred.';
-        
-        try {
-          if (err.error) {
-            if (typeof err.error === 'object') {
-              const rawMessage = err.error.details || err.error.error || err.error.message;
-              message = typeof rawMessage === 'string' ? rawMessage : JSON.stringify(err.error);
-            } else if (typeof err.error === 'string') {
-              message = err.error;
-            }
-          } else {
-            message = err.message || message;
-          }
-        } catch {
-          message = 'Error parsing server response: ' + (err.message || 'Unknown error');
-        }
+    const itemsString = this.cartService.cartItems().map(item => `${item.quantity}x ${item.product.name}`).join('\n');
+    const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-        if (typeof message !== 'string') {
-          message = JSON.stringify(message);
-        }
+    const formBody = new URLSearchParams();
+    formBody.append('entry.1289515362', this.formData.name || '');
+    formBody.append('entry.841398653', this.formData.email || '');
+    formBody.append('entry.1068202683', this.formData.phone || '');
+    
+    let orderDetails = `Order ID: ${orderId}\n\nItems:\n${itemsString}`;
+    if (this.formData.notes) {
+      orderDetails += `\n\nNotes:\n${this.formData.notes}`;
+    }
+    formBody.append('entry.1927657256', orderDetails);
+    
+    formBody.append('entry.1147881902', this.formData.country || '');
+    formBody.append('entry.1411113354', this.formData.province || '');
+    formBody.append('entry.1980160641', this.formData.address || '');
+    formBody.append('entry.1385289147', this.cartService.cartTotal().toString());
 
-        this.errorMessage.set(`Order Submission Error: ${message}`);
-        this.isSubmitting.set(false);
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe_5eS5dX5iXRU6JvBvafqradZ5esz9d-5RrbHlUy2TSHWTBA/formResponse';
+
+    fetch(formUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formBody,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
+    }).then(() => {
+      this.finalizeWhatsAppOrder();
+    }).catch(err => {
+      console.error('Failed to save order to Google Forms:', err);
+      this.errorMessage.set(`Order Submission Error: Check your internet connection and try again.`);
+      this.isSubmitting.set(false);
     });
   }
 
