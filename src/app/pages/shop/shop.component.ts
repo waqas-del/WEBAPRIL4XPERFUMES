@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { ProductService } from '../../services/product.service';
@@ -23,92 +24,188 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
 
         <div class="flex flex-col lg:flex-row gap-8">
           
+          <!-- Mobile Filter Overlay -->
+          @if (isMobileFilterOpen()) {
+            <div class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity" (click)="isMobileFilterOpen.set(false)"></div>
+          }
+
           <!-- Sidebar Filters -->
-          <aside class="w-full lg:w-64 flex-shrink-0">
-            <div class="bg-white p-6 border border-gray-200 sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto">
-              <div class="mb-6">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">Search</h3>
-                <div class="relative">
-                  <input 
-                    type="text" 
-                    [(ngModel)]="searchQuery" 
-                    (ngModelChange)="applyFilters()"
-                    placeholder="Search perfumes..." 
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-sm focus:ring-gold-500 focus:border-gold-500 text-sm"
-                  >
-                  <mat-icon class="absolute left-3 top-2.5 text-gray-400" style="font-size: 18px; width: 18px; height: 18px;">search</mat-icon>
+          <aside class="fixed inset-y-0 left-0 z-50 w-[280px] bg-white overflow-y-auto transform transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 lg:w-64 lg:flex-shrink-0 lg:z-auto lg:bg-transparent lg:overflow-visible"
+                 [class.translate-x-0]="isMobileFilterOpen()"
+                 [class.-translate-x-full]="!isMobileFilterOpen()">
+            <div class="bg-white border-r lg:border border-gray-200 lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto min-h-full lg:min-h-0 pb-20 lg:pb-0">
+              
+              <!-- Mobile Header -->
+              <div class="flex items-center justify-between p-4 border-b border-gray-200 lg:hidden sticky top-0 bg-white z-10">
+                <h2 class="text-lg font-serif font-bold text-gray-900">Filters</h2>
+                <button (click)="isMobileFilterOpen.set(false)" class="p-2 -mr-2 text-gray-500 hover:text-gray-900 transition-colors">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+
+              <!-- Search -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('search')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Search</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['search']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['search']">
+                  <div class="relative">
+                    <input 
+                      type="text" 
+                      [(ngModel)]="searchQuery" 
+                      (ngModelChange)="applyFilters()"
+                      placeholder="Search perfumes..." 
+                      class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-sm focus:ring-gold-500 focus:border-gold-500 text-sm"
+                    >
+                    <mat-icon class="absolute left-3 top-2.5 text-gray-400" style="font-size: 18px; width: 18px; height: 18px;">search</mat-icon>
+                  </div>
                 </div>
               </div>
 
-              <div class="mb-6">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">Sort By</h3>
-                <select [(ngModel)]="selectedSort" (ngModelChange)="applyFilters()" class="w-full border-gray-300 rounded-sm focus:ring-gold-500 focus:border-gold-500 text-sm py-2">
-                  <option value="default">Featured</option>
-                  <option value="best-seller">Best Sellers</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                </select>
-              </div>
-
-              <div class="mb-6">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">Gender</h3>
-                <div class="space-y-2">
-                  @for (gender of ['All', 'Male', 'Female', 'Unisex']; track gender) {
-                    <label class="flex items-center">
-                      <input type="radio" name="gender" [value]="gender" [(ngModel)]="selectedGender" (ngModelChange)="applyFilters()" class="text-gold-600 focus:ring-gold-500 border-gray-300">
-                      <span class="ml-2 text-sm text-gray-600">{{ gender }}</span>
-                    </label>
-                  }
+              <!-- Sort By -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('sort')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Sort By</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['sort']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['sort']">
+                  <select [(ngModel)]="selectedSort" (ngModelChange)="applyFilters()" class="w-full border-gray-300 rounded-sm focus:ring-gold-500 focus:border-gold-500 text-sm py-2">
+                    <option value="default">Featured</option>
+                    <option value="best-seller">Best Sellers</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                  </select>
                 </div>
               </div>
 
-              <div class="mb-6">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">Brand</h3>
-                <select [(ngModel)]="selectedBrand" (ngModelChange)="applyFilters()" class="w-full border-gray-300 rounded-sm focus:ring-gold-500 focus:border-gold-500 text-sm py-2">
-                  <option value="All">All Brands</option>
-                  @for (brand of brands(); track brand) {
-                    <option [value]="brand">{{ brand }}</option>
-                  }
-                </select>
-              </div>
-
-              <div class="mb-6">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">Category</h3>
-                <select [(ngModel)]="selectedCategory" (ngModelChange)="applyFilters()" class="w-full border-gray-300 rounded-sm focus:ring-gold-500 focus:border-gold-500 text-sm py-2">
-                  <option value="All">All Categories</option>
-                  @for (cat of categories(); track cat) {
-                    <option [value]="cat">{{ cat }}</option>
-                  }
-                </select>
-              </div>
-
-              <div class="mb-6">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">Longevity</h3>
-                <div class="space-y-2">
-                  @for (longevity of longevityOptions; track longevity) {
-                    <label class="flex items-center">
-                      <input type="radio" name="longevity" [value]="longevity" [(ngModel)]="selectedLongevity" (ngModelChange)="applyFilters()" class="text-gold-600 focus:ring-gold-500 border-gray-300">
-                      <span class="ml-2 text-sm text-gray-600">{{ longevity }}</span>
-                    </label>
-                  }
+              <!-- Gender -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('gender')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Gender</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['gender']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['gender']">
+                  <div class="space-y-2">
+                    @for (gender of ['All', 'Male', 'Female', 'Unisex']; track gender) {
+                      <label class="flex items-center cursor-pointer group">
+                        <input type="radio" name="gender" [value]="gender" [(ngModel)]="selectedGender" (ngModelChange)="applyFilters()" class="text-gold-600 focus:ring-gold-500 border-gray-300">
+                        <span class="ml-2 text-sm text-gray-600 group-hover:text-gray-900">{{ gender }}</span>
+                      </label>
+                    }
+                  </div>
                 </div>
               </div>
 
-              <div class="mb-6">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">Sillage</h3>
-                <div class="space-y-2">
-                  @for (sillage of sillageOptions; track sillage) {
-                    <label class="flex items-center">
-                      <input type="radio" name="sillage" [value]="sillage" [(ngModel)]="selectedSillage" (ngModelChange)="applyFilters()" class="text-gold-600 focus:ring-gold-500 border-gray-300">
-                      <span class="ml-2 text-sm text-gray-600">{{ sillage }}</span>
-                    </label>
-                  }
+              <!-- Season (When to Wear) -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('season')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">When to Wear</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['season']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['season']">
+                  <div class="space-y-2">
+                    @for (season of seasonsOptions(); track season) {
+                      <label class="flex items-center cursor-pointer group">
+                        <input type="checkbox" [checked]="selectedSeasons.includes(season)" (change)="toggleSeason(season)" class="text-gold-600 focus:ring-gold-500 border-gray-300 rounded-sm">
+                        <span class="ml-2 text-sm text-gray-600 group-hover:text-gray-900">{{ season }}</span>
+                      </label>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Best Occasion -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('occasion')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Best Occasion</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['occasion']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['occasion']">
+                  <div class="space-y-2">
+                    @for (occasion of occasionsOptions(); track occasion) {
+                      <label class="flex items-center cursor-pointer group">
+                        <input type="checkbox" [checked]="selectedOccasions.includes(occasion)" (change)="toggleOccasion(occasion)" class="text-gold-600 focus:ring-gold-500 border-gray-300 rounded-sm">
+                        <span class="ml-2 text-sm text-gray-600 group-hover:text-gray-900">{{ occasion }}</span>
+                      </label>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Brand -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('brand')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Brand</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['brand']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['brand']">
+                  <select [(ngModel)]="selectedBrand" (ngModelChange)="applyFilters()" class="w-full border-gray-300 rounded-sm focus:ring-gold-500 focus:border-gold-500 text-sm py-2">
+                    <option value="All">All Brands</option>
+                    @for (brand of brands(); track brand) {
+                      <option [value]="brand">{{ brand }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <!-- Category -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('category')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Category</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['category']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['category']">
+                  <select [(ngModel)]="selectedCategory" (ngModelChange)="applyFilters()" class="w-full border-gray-300 rounded-sm focus:ring-gold-500 focus:border-gold-500 text-sm py-2">
+                    <option value="All">All Categories</option>
+                    @for (cat of categories(); track cat) {
+                      <option [value]="cat">{{ cat }}</option>
+                    }
+                  </select>
+                </div>
+              </div>
+
+              <!-- Longevity -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('longevity')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Longevity</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['longevity']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['longevity']">
+                  <div class="space-y-2">
+                    @for (longevity of longevityOptions; track longevity) {
+                      <label class="flex items-center cursor-pointer group">
+                        <input type="radio" name="longevity" [value]="longevity" [(ngModel)]="selectedLongevity" (ngModelChange)="applyFilters()" class="text-gold-600 focus:ring-gold-500 border-gray-300">
+                        <span class="ml-2 text-sm text-gray-600 group-hover:text-gray-900">{{ longevity }}</span>
+                      </label>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sillage -->
+              <div class="border-b border-gray-200">
+                <button (click)="toggleSection('sillage')" class="w-full px-6 py-4 flex justify-between items-center bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <h3 class="text-xs font-bold uppercase tracking-widest text-gray-900">Sillage</h3>
+                  <mat-icon class="text-gray-500 transition-transform duration-300" [class.rotate-180]="expandedSections['sillage']">expand_more</mat-icon>
+                </button>
+                <div class="px-6 pb-6 pt-2" [class.hidden]="!expandedSections['sillage']">
+                  <div class="space-y-2">
+                    @for (sillage of sillageOptions; track sillage) {
+                      <label class="flex items-center cursor-pointer group">
+                        <input type="radio" name="sillage" [value]="sillage" [(ngModel)]="selectedSillage" (ngModelChange)="applyFilters()" class="text-gold-600 focus:ring-gold-500 border-gray-300">
+                        <span class="ml-2 text-sm text-gray-600 group-hover:text-gray-900">{{ sillage }}</span>
+                      </label>
+                    }
+                  </div>
                 </div>
               </div>
               
-              <button (click)="resetFilters()" class="w-full py-2 text-sm text-gray-500 hover:text-gray-900 border border-gray-300 hover:bg-gray-50 transition-colors">
-                Reset Filters
-              </button>
+              <div class="p-6">
+                <button (click)="resetFilters()" class="w-full py-2 text-sm text-gray-500 hover:text-gray-900 border border-gray-300 hover:bg-gray-50 transition-colors">
+                  Reset Filters
+                </button>
+              </div>
             </div>
           </aside>
 
@@ -122,6 +219,10 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
                   Showing {{ filteredProducts().length }} results
                 }
               </p>
+              <button (click)="isMobileFilterOpen.set(true)" class="lg:hidden flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-sm text-sm font-medium text-gray-700 hover:bg-gray-50 shadow-sm transition-colors">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px;">filter_list</mat-icon>
+                Filters
+              </button>
             </div>
 
             @if (isLoading()) {
@@ -178,10 +279,13 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
 export class ShopComponent implements OnInit {
   private productService = inject(ProductService);
   private route = inject(ActivatedRoute);
+  private titleService = inject(Title);
+  private metaService = inject(Meta);
 
   allProducts = signal<Product[]>([]);
   filteredProducts = signal<Product[]>([]);
   isLoading = signal(true);
+  isMobileFilterOpen = signal(false);
 
   searchQuery = '';
   selectedSort = 'default';
@@ -190,6 +294,20 @@ export class ShopComponent implements OnInit {
   selectedCategory = 'All';
   selectedLongevity = 'All';
   selectedSillage = 'All';
+  selectedSeasons: string[] = [];
+  selectedOccasions: string[] = [];
+
+  expandedSections: Record<string, boolean> = {
+    search: true,
+    sort: true,
+    gender: true,
+    season: true,
+    occasion: true,
+    brand: false,
+    category: false,
+    longevity: false,
+    sillage: false
+  };
 
   longevityOptions = ['All', 'Moderate', 'Long lasting', 'Eternal'];
   sillageOptions = ['All', 'Intimate', 'Moderate', 'Strong', 'Enormous'];
@@ -204,7 +322,57 @@ export class ShopComponent implements OnInit {
     return Array.from(uniqueCats).sort();
   });
 
+  seasonsOptions = computed(() => {
+    const uniqueSeasons = new Set<string>();
+    this.allProducts().forEach(p => {
+      if (p.whenToWear) {
+        p.whenToWear.split(',').forEach(s => uniqueSeasons.add(s.trim()));
+      }
+    });
+    return Array.from(uniqueSeasons).sort();
+  });
+
+  occasionsOptions = computed(() => {
+    const uniqueOccasions = new Set<string>();
+    this.allProducts().forEach(p => {
+      if (p.bestOccasion) {
+        p.bestOccasion.split(',').forEach(o => uniqueOccasions.add(o.trim()));
+      }
+    });
+    return Array.from(uniqueOccasions).sort();
+  });
+
+  toggleSection(section: string) {
+    this.expandedSections[section] = !this.expandedSections[section];
+  }
+
+  toggleSeason(season: string) {
+    const index = this.selectedSeasons.indexOf(season);
+    if (index > -1) {
+      this.selectedSeasons.splice(index, 1);
+    } else {
+      this.selectedSeasons.push(season);
+    }
+    this.applyFilters();
+  }
+
+  toggleOccasion(occasion: string) {
+    const index = this.selectedOccasions.indexOf(occasion);
+    if (index > -1) {
+      this.selectedOccasions.splice(index, 1);
+    } else {
+      this.selectedOccasions.push(occasion);
+    }
+    this.applyFilters();
+  }
+
   ngOnInit() {
+    this.titleService.setTitle('Shop All Fragrances | XPerfumes');
+    this.metaService.updateTag({ name: 'description', content: 'Explore our full collection of luxury impression fragrances at XPerfumes. Filter by gender, brand, season, and occasion to find your perfect scent.' });
+    this.metaService.updateTag({ property: 'og:title', content: 'Shop All Fragrances | XPerfumes' });
+    this.metaService.updateTag({ property: 'og:description', content: 'Explore our full collection of luxury impression fragrances at XPerfumes. Filter by gender, brand, season, and occasion to find your perfect scent.' });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+
     // Simulate network request for loading skeleton
     setTimeout(() => {
       this.allProducts.set(this.productService.getAllProducts());
@@ -267,6 +435,22 @@ export class ShopComponent implements OnInit {
       result = result.filter(p => p.sillage === this.selectedSillage);
     }
 
+    if (this.selectedSeasons.length > 0) {
+      result = result.filter(p => {
+        if (!p.whenToWear) return false;
+        const productSeasons = p.whenToWear.split(',').map(s => s.trim());
+        return this.selectedSeasons.some(selected => productSeasons.includes(selected));
+      });
+    }
+
+    if (this.selectedOccasions.length > 0) {
+      result = result.filter(p => {
+        if (!p.bestOccasion) return false;
+        const productOccasions = p.bestOccasion.split(',').map(o => o.trim());
+        return this.selectedOccasions.some(selected => productOccasions.includes(selected));
+      });
+    }
+
     // Apply Sorting
     if (this.selectedSort === 'best-seller') {
       result = result.sort((a, b) => (b.isTopPick ? 1 : 0) - (a.isTopPick ? 1 : 0));
@@ -291,6 +475,8 @@ export class ShopComponent implements OnInit {
     this.selectedCategory = 'All';
     this.selectedLongevity = 'All';
     this.selectedSillage = 'All';
+    this.selectedSeasons = [];
+    this.selectedOccasions = [];
     this.applyFilters();
   }
 }

@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
@@ -36,7 +37,7 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
                   <img src="https://ais-pre-t7gjcw6mcpay6ihwkb46i4-306586258974.europe-west2.run.app/api/attachments/1LkvJAAUDEmd09bRMB7nSKnOsxHsRaRNH" 
                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] max-w-none h-[150%] object-contain opacity-[0.08] -z-10 pointer-events-none"
                        referrerpolicy="no-referrer"
-                       alt="">
+                       [alt]="product()?.name + ' Impression by XPerfumes'">
                   
                   <p class="text-xs uppercase tracking-[0.3em] text-gray-400 mb-4">{{ product()?.brand }}</p>
                   <h1 class="text-4xl md:text-5xl font-serif text-gray-900 leading-tight">{{ product()?.name }}</h1>
@@ -82,9 +83,20 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-4">
-                  <button (click)="addToCart()" class="flex-1 bg-gray-900 text-white px-8 py-4 text-sm font-medium uppercase tracking-wider hover:bg-gray-800 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2">
-                    <mat-icon style="font-size: 18px; width: 18px; height: 18px;">shopping_bag</mat-icon>
-                    Add to Cart
+                  <button (click)="addToCart()" 
+                          [class.bg-green-600]="isAddedToCart()"
+                          [class.hover:bg-green-700]="isAddedToCart()"
+                          [class.bg-gray-900]="!isAddedToCart()"
+                          [class.hover:bg-gray-800]="!isAddedToCart()"
+                          class="flex-1 text-white px-8 py-4 text-sm font-medium uppercase tracking-wider transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2 relative overflow-hidden">
+                    
+                    @if (isAddedToCart()) {
+                      <mat-icon class="animate-bounce" style="font-size: 18px; width: 18px; height: 18px;">check_circle</mat-icon>
+                      <span>Added to Cart!</span>
+                    } @else {
+                      <mat-icon style="font-size: 18px; width: 18px; height: 18px;">shopping_bag</mat-icon>
+                      <span>Add to Cart</span>
+                    }
                   </button>
                   <button (click)="orderViaWhatsApp()" class="flex-1 bg-green-600 text-white px-8 py-4 text-sm font-medium uppercase tracking-wider hover:bg-green-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95 flex items-center justify-center gap-2">
                     <mat-icon style="font-size: 18px; width: 18px; height: 18px;">chat</mat-icon>
@@ -130,6 +142,59 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
                         <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold" [class]="scentProfileTheme().sillageBadge">
                           {{ product()?.sillage }}
                         </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200 pt-8 mb-8">
+                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">Why This Scent?</h3>
+                <div class="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-sm relative overflow-hidden">
+                  <div class="absolute -right-4 -bottom-4 text-gray-200 transform -rotate-12">
+                    <mat-icon style="font-size: 140px; width: 140px; height: 140px;">psychology</mat-icon>
+                  </div>
+                  <div class="relative z-10 flex items-start gap-4">
+                    <div class="flex-shrink-0 w-12 h-12 bg-gold-100 rounded-full flex items-center justify-center text-gold-600">
+                      <mat-icon>auto_awesome</mat-icon>
+                    </div>
+                    <div class="flex-1">
+                      <p class="text-gray-700 leading-relaxed text-lg mb-6">
+                        This fragrance is perfectly suited for the <strong class="text-gray-900 font-serif">{{ product()?.profession }}</strong>. 
+                        It embodies a <strong class="text-gray-900 font-serif">{{ product()?.persona }}</strong> vibe, making it the ideal choice to complement your unique character and leave a memorable impression.
+                      </p>
+                      
+                      <!-- Key Accords Subsection -->
+                      <div class="pt-6 mt-6 border-t border-gray-200/60">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4 flex items-center gap-2">
+                          <mat-icon style="font-size: 16px; width: 16px; height: 16px;">bubble_chart</mat-icon>
+                          Key Accords
+                        </h4>
+                        <div class="flex flex-wrap gap-2.5">
+                          @for (accord of keyAccords(); track accord) {
+                            <span class="group relative inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium bg-white border border-gray-200 text-gray-700 shadow-sm hover:shadow-md hover:border-gold-300 hover:text-gold-700 transition-all duration-300 cursor-default hover:-translate-y-0.5 overflow-hidden">
+                              <span class="absolute inset-0 bg-gradient-to-r from-gold-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                              <span class="relative z-10">{{ accord }}</span>
+                            </span>
+                          }
+                        </div>
+                      </div>
+
+                      <!-- Perfumer Subsection -->
+                      <div class="pt-6 mt-6 border-t border-gray-200/60">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 flex items-center gap-2">
+                          <mat-icon style="font-size: 16px; width: 16px; height: 16px;">science</mat-icon>
+                          The Nose Behind The Scent
+                        </h4>
+                        <div class="flex items-center gap-3">
+                          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-600 border border-gray-300 shadow-inner">
+                            <mat-icon style="font-size: 20px; width: 20px; height: 20px;">person</mat-icon>
+                          </div>
+                          <div>
+                            <p class="text-gray-900 font-serif font-bold text-lg">{{ product()?.perfumer }}</p>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">Master Perfumer</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -255,6 +320,17 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
           <a routerLink="/shop" class="text-gold-600 hover:text-gold-700 underline">Return to Shop</a>
         </div>
       }
+      
+      <!-- Floating Toast Notification -->
+      @if (isAddedToCart()) {
+        <div class="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 animate-bounce">
+          <div class="bg-gray-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3">
+            <mat-icon class="text-green-400" style="font-size: 20px; width: 20px; height: 20px;">check_circle</mat-icon>
+            <span class="font-medium text-sm">{{ product()?.name }} added to cart</span>
+            <a routerLink="/cart" class="ml-4 text-xs font-bold uppercase tracking-widest text-gold-400 hover:text-gold-300 underline">View Cart</a>
+          </div>
+        </div>
+      }
     </div>
   `
 })
@@ -302,14 +378,53 @@ export class ProductDetailComponent implements OnInit {
     }
   });
 
+  isAddedToCart = signal(false);
+
+  keyAccords = computed(() => {
+    const prod = this.product();
+    if (!prod) return [];
+    const accords = new Set<string>();
+    
+    if (prod.olfactoryFamily) {
+      prod.olfactoryFamily.split(/[\s-]+/).forEach(w => {
+        if (w.length > 2) accords.add(w.trim());
+      });
+    }
+    
+    if (prod.keyNotes) {
+      prod.keyNotes.split(',').forEach(w => {
+        const note = w.trim();
+        if (note.length > 2) accords.add(note);
+      });
+    }
+    
+    return Array.from(accords).slice(0, 6);
+  });
+
+  private titleService = inject(Title);
+  private metaService = inject(Meta);
+
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        const p = this.productService.getProductById(id);
+      const slug = params.get('slug');
+      if (slug) {
+        const p = this.productService.getProductBySlug(slug);
         if (p) {
           this.product.set(p);
           this.similarProducts.set(this.productService.getSimilarProducts(p, 3));
+          
+          // Update SEO Title and Meta Tags
+          const pageTitle = `${p.name} Impression by XPerfumes | ${p.brand}`;
+          const pageDescription = `Discover our impression of ${p.name} by ${p.brand}. A ${p.olfactoryFamily} fragrance featuring ${p.keyNotes}. Shop luxury impressions at XPerfumes.`;
+          
+          this.titleService.setTitle(pageTitle);
+          this.metaService.updateTag({ name: 'description', content: pageDescription });
+          
+          // Open Graph tags
+          this.metaService.updateTag({ property: 'og:title', content: pageTitle });
+          this.metaService.updateTag({ property: 'og:description', content: pageDescription });
+          this.metaService.updateTag({ property: 'og:type', content: 'product' });
+          
           // Scroll to top when product changes
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
@@ -323,7 +438,10 @@ export class ProductDetailComponent implements OnInit {
     const p = this.product();
     if (p) {
       this.cartService.addToCart(p);
-      // Optional: Show a toast notification here
+      this.isAddedToCart.set(true);
+      setTimeout(() => {
+        this.isAddedToCart.set(false);
+      }, 2000);
     }
   }
 

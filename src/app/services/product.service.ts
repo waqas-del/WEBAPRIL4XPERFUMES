@@ -2673,11 +2673,15 @@ export class ProductService {
 
   constructor() {
     // Initialize products with calculated impression prices
-    const processedProducts: Product[] = this.rawProducts.map(p => ({
-      ...p,
-      gender: p.gender as 'Male' | 'Female' | 'Unisex',
-      impressionPrice: this.calculateImpressionPrice(p.originalPrice)
-    }));
+    const processedProducts: Product[] = this.rawProducts.map(p => {
+      const baseSlug = `${p.brand}-${p.name}-impression-by-xperfumes`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      return {
+        ...p,
+        gender: p.gender as 'Male' | 'Female' | 'Unisex',
+        impressionPrice: this.calculateImpressionPrice(p.originalPrice),
+        slug: baseSlug
+      };
+    });
     this.products.set(processedProducts);
   }
 
@@ -2687,6 +2691,10 @@ export class ProductService {
 
   getProductById(id: string): Product | undefined {
     return this.products().find(p => p.id === id);
+  }
+
+  getProductBySlug(slug: string): Product | undefined {
+    return this.products().find(p => p.slug === slug);
   }
 
   getTopPicks(): Product[] {

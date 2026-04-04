@@ -10,7 +10,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/shop/shop.component').then(m => m.ShopComponent)
   },
   {
-    path: 'product/:id',
+    path: 'product/:slug',
     loadComponent: () => import('./pages/product-detail/product-detail.component').then(m => m.ProductDetailComponent)
   },
   {
@@ -44,6 +44,10 @@ export const routes: Routes = [
   {
     path: 'shipping-delivery',
     loadComponent: () => import('./pages/shipping-delivery/shipping-delivery.component').then(m => m.ShippingDeliveryComponent)
+  },
+  {
+    path: 'guide',
+    loadComponent: () => import('./pages/fragrance-guide/fragrance-guide.component').then(m => m.FragranceGuideComponent)
   },
   {
     path: '**',

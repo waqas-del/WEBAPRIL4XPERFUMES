@@ -24,6 +24,7 @@ import { CartService } from '../../services/cart.service';
             <a routerLink="/" routerLinkActive="text-gold-600" [routerLinkActiveOptions]="{exact: true}" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">Home</a>
             <a routerLink="/shop" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">Shop Collection</a>
             <a routerLink="/shop" [queryParams]="{ category: womensChoiceCategory }" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap">Best Sellers</a>
+            <a routerLink="/guide" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">Scent Guide</a>
             <a routerLink="/about-us" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">About Us</a>
             <a routerLink="/contact-us" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">Contact Us</a>
           </nav>

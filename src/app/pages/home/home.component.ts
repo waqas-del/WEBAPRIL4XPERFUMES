@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
@@ -227,11 +228,20 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
 })
 export class HomeComponent implements OnInit {
   private productService = inject(ProductService);
+  private titleService = inject(Title);
+  private metaService = inject(Meta);
+
   topPicks: Product[] = [];
   bestForMen: Product[] = [];
   bestForWomen: Product[] = [];
 
   ngOnInit() {
+    this.titleService.setTitle('XPerfumes | Luxury Impression Fragrances');
+    this.metaService.updateTag({ name: 'description', content: 'Discover XPerfumes, your destination for high-quality, long-lasting luxury impression fragrances. Shop the best designer perfume alternatives.' });
+    this.metaService.updateTag({ property: 'og:title', content: 'XPerfumes | Luxury Impression Fragrances' });
+    this.metaService.updateTag({ property: 'og:description', content: 'Discover XPerfumes, your destination for high-quality, long-lasting luxury impression fragrances. Shop the best designer perfume alternatives.' });
+    this.metaService.updateTag({ property: 'og:type', content: 'website' });
+
     this.topPicks = this.productService.getTopPicks();
     const allProducts = this.productService.getAllProducts();
     this.bestForMen = allProducts.filter(p => p.gender === 'Male').slice(0, 4);

@@ -20,6 +20,7 @@ export interface Product {
   profession: string;
   persona: string;
   isTopPick?: boolean;
+  slug?: string;
 }
 
 export interface CartItem {

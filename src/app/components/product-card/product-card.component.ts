@@ -8,7 +8,7 @@ import { Product } from '../../models/product.model';
   standalone: true,
   imports: [RouterLink, MatIconModule],
   template: `
-    <a [routerLink]="['/product', product().id]" class="group block h-full">
+    <a [routerLink]="['/product', product().slug]" class="group block h-full">
       <div class="border p-6 h-full flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] relative overflow-hidden"
            [class]="themeClasses().container">
         
@@ -27,17 +27,21 @@ import { Product } from '../../models/product.model';
             <span class="text-xs px-2 py-1 rounded-sm" [class]="themeClasses().badge">{{ product().category }}</span>
           </div>
           
-          <p class="text-sm line-clamp-2 mb-4" [class]="themeClasses().notesText">
-            <span class="font-medium" [class]="themeClasses().notesLabel">Notes:</span> {{ product().keyNotes }}
-          </p>
+          <div class="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+            <div class="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
+              <p class="text-sm line-clamp-3 mb-4 mt-1" [class]="themeClasses().notesText">
+                <span class="font-medium" [class]="themeClasses().notesLabel">Key Notes:</span> {{ product().keyNotes }}
+              </p>
+            </div>
+          </div>
         </div>
         
         <div class="mt-auto pt-4 border-t flex items-end justify-between relative z-10" [class]="themeClasses().divider">
           <div>
             <p class="text-[10px] uppercase tracking-wider mb-0.5" [class]="themeClasses().originalPrice">Original: <span class="line-through">{{ product().originalPrice }} AED</span></p>
-            <p class="text-sm font-medium" [class]="themeClasses().impressionPriceContainer">
+            <p class="text-sm font-medium flex items-baseline gap-1" [class]="themeClasses().impressionPriceContainer">
               <span class="text-[10px] uppercase tracking-wider mr-1" [class]="themeClasses().impressionLabel">Impression:</span>
-              <span class="text-lg" [class]="themeClasses().impressionPrice">{{ product().impressionPrice }} AED</span>
+              <span class="text-2xl font-bold" [class]="themeClasses().impressionPrice">{{ product().impressionPrice }} AED</span>
             </p>
           </div>
           <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" [class]="themeClasses().arrowBtn">

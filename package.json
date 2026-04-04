@@ -9,7 +9,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "serve:ssr:app": "node dist/app/server/server.mjs"
+    "serve:ssr:app": "node dist/app/server/server.mjs",
+    "fetch-form": "tsx src/fetch-form.ts"
   },
   "private": true,
   "dependencies": {
@@ -25,8 +26,6 @@
     "@angular/ssr": "^21.0.0",
     "@google/genai": "^1.27.0",
     "express": "^5.1.0",
-    "google-auth-library": "^10.6.2",
-    "google-spreadsheet": "^5.2.0",
     "motion": "^12.23.24",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
@@ -44,6 +43,7 @@
     "jsdom": "^27.0.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.12",
+    "tsx": "^4.21.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "8.47.0",
     "vitest": "^4.0.0"

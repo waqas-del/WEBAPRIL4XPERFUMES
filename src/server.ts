@@ -6,8 +6,6 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import {join} from 'node:path';
-import { GoogleSpreadsheet } from 'google-spreadsheet';
-import { JWT } from 'google-auth-library';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -23,74 +21,44 @@ app.post('/api/orders', async (req, res) => {
   try {
     const { items, details, total } = req.body;
     
-    const sheetId = process.env['GOOGLE_SHEET_ID'];
-    const clientEmail = process.env['GOOGLE_SERVICE_ACCOUNT_EMAIL'];
-    let privateKey = process.env['GOOGLE_PRIVATE_KEY'];
-
-    if (privateKey) {
-      // Remove potential quotes and handle escaped newlines
-      privateKey = privateKey.trim();
-      if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
-        privateKey = privateKey.substring(1, privateKey.length - 1);
-      }
-      privateKey = privateKey.replace(/\\n/g, '\n');
-      
-      if (!privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
-        console.error('GOOGLE_PRIVATE_KEY format seems invalid (missing header)');
-        return res.status(500).json({ 
-          error: 'Invalid Private Key', 
-          details: 'The GOOGLE_PRIVATE_KEY does not appear to be a valid PEM format key. Ensure it includes the BEGIN/END headers.' 
-        });
-      }
-    }
-
-    if (!sheetId || !clientEmail || !privateKey) {
-      const missing = [];
-      if (!sheetId) missing.push('GOOGLE_SHEET_ID');
-      if (!clientEmail) missing.push('GOOGLE_SERVICE_ACCOUNT_EMAIL');
-      if (!privateKey) missing.push('GOOGLE_PRIVATE_KEY');
-      
-      console.error('Missing Google Sheets configuration:', missing.join(', '));
-      return res.status(500).json({ 
-        error: 'Server configuration error', 
-        details: `Missing environment variables: ${missing.join(', ')}. Please check your Vercel project settings.` 
-      });
-    }
-
-    const serviceAccountAuth = new JWT({
-      email: clientEmail,
-      key: privateKey,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
-
-    const doc = new GoogleSpreadsheet(sheetId, serviceAccountAuth);
-    await doc.loadInfo();
-    
-    const sheet = doc.sheetsByIndex[0];
-    
-    const itemsString = items.map((item: { quantity: number; product: { name: string } }) => `${item.quantity}x ${item.product.name}`).join(', ');
+    const itemsString = items.map((item: { quantity: number; product: { name: string } }) => `${item.quantity}x ${item.product.name}`).join('\n');
     const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    await sheet.addRow({
-      'Date': new Date().toLocaleString(),
-      'Type': 'ORDER',
-      'Order ID': orderId,
-      'Status': 'Pending',
-      'Name': details.name,
-      'Email': details.email,
-      'Phone': details.phone,
-      'Country': details.country,
-      'Province': details.province,
-      'Address': details.address,
-      'Items/Message': itemsString,
-      'Total (AED)': total,
-      'Notes/Subject': details.notes || ''
+    const formData = new URLSearchParams();
+    formData.append('entry.1289515362', details.name || '');
+    formData.append('entry.841398653', details.email || '');
+    formData.append('entry.1068202683', details.phone || '');
+    
+    // Combine items and notes into the Order Details field
+    let orderDetails = `Order ID: ${orderId}\n\nItems:\n${itemsString}`;
+    if (details.notes) {
+      orderDetails += `\n\nNotes:\n${details.notes}`;
+    }
+    formData.append('entry.1927657256', orderDetails);
+    
+    formData.append('entry.1147881902', details.country || '');
+    formData.append('entry.1411113354', details.province || '');
+    formData.append('entry.1980160641', details.address || '');
+    formData.append('entry.1385289147', total ? total.toString() : '0');
+
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe_5eS5dX5iXRU6JvBvafqradZ5esz9d-5RrbHlUy2TSHWTBA/formResponse';
+    
+    const response = await fetch(formUrl, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     });
+
+    if (!response.ok) {
+      throw new Error(`Google Forms returned status ${response.status}`);
+    }
 
     return res.status(200).json({ success: true, orderId });
   } catch (error) {
     const err = error as { message?: string };
-    console.error('Error adding order to Google Sheets:', err);
+    console.error('Error submitting order to Google Forms:', err);
     let details = 'Unknown error';
     try {
       details = err.message || (typeof err === 'string' ? err : JSON.stringify(err));
@@ -108,56 +76,37 @@ app.post('/api/contact', async (req, res) => {
   try {
     const { name, email, phone, subject, message } = req.body;
     
-    const sheetId = process.env['GOOGLE_SHEET_ID'];
-    const clientEmail = process.env['GOOGLE_SERVICE_ACCOUNT_EMAIL'];
-    let privateKey = process.env['GOOGLE_PRIVATE_KEY'];
-
-    if (privateKey) {
-      privateKey = privateKey.trim();
-      if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
-        privateKey = privateKey.substring(1, privateKey.length - 1);
-      }
-      privateKey = privateKey.replace(/\\n/g, '\n');
-    }
-
-    if (!sheetId || !clientEmail || !privateKey) {
-      return res.status(500).json({ 
-        error: 'Server configuration error', 
-        details: 'Missing environment variables. Please check your Vercel project settings.' 
-      });
-    }
-
-    const serviceAccountAuth = new JWT({
-      email: clientEmail,
-      key: privateKey,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
-
-    const doc = new GoogleSpreadsheet(sheetId, serviceAccountAuth);
-    await doc.loadInfo();
+    const formData = new URLSearchParams();
+    formData.append('entry.1289515362', name || '');
+    formData.append('entry.841398653', email || '');
+    formData.append('entry.1068202683', phone || '');
     
-    const sheet = doc.sheetsByIndex[0];
+    const details = `CONTACT MESSAGE\n\nSubject: ${subject || 'No Subject'}\n\nMessage:\n${message || ''}`;
+    formData.append('entry.1927657256', details);
+    
+    formData.append('entry.1147881902', '-');
+    formData.append('entry.1411113354', '-');
+    formData.append('entry.1980160641', '-');
+    formData.append('entry.1385289147', '0');
 
-    await sheet.addRow({
-      'Date': new Date().toLocaleString(),
-      'Type': 'CONTACT',
-      'Order ID': '-',
-      'Status': 'New',
-      'Name': name,
-      'Email': email,
-      'Phone': phone,
-      'Country': '-',
-      'Province': '-',
-      'Address': '-',
-      'Items/Message': message,
-      'Total (AED)': '-',
-      'Notes/Subject': subject
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe_5eS5dX5iXRU6JvBvafqradZ5esz9d-5RrbHlUy2TSHWTBA/formResponse';
+    
+    const response = await fetch(formUrl, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     });
+
+    if (!response.ok) {
+      throw new Error(`Google Forms returned status ${response.status}`);
+    }
 
     return res.status(200).json({ success: true });
   } catch (error) {
     const err = error as { message?: string };
-    console.error('Error adding contact to Google Sheets:', err);
+    console.error('Error submitting contact to Google Forms:', err);
     let details = 'Unknown error';
     try {
       details = err.message || (typeof err === 'string' ? err : JSON.stringify(err));
@@ -165,77 +114,6 @@ app.post('/api/contact', async (req, res) => {
       details = 'Error details could not be stringified';
     }
     return res.status(500).json({ error: 'Failed to save contact message', details });
-  }
-});
-
-/**
- * Test endpoint to verify Google Sheets connection
- */
-app.get('/api/test-sheets', async (req, res) => {
-  try {
-    const sheetId = process.env['GOOGLE_SHEET_ID'];
-    const clientEmail = process.env['GOOGLE_SERVICE_ACCOUNT_EMAIL'];
-    let privateKey = process.env['GOOGLE_PRIVATE_KEY'];
-
-    if (privateKey) {
-      privateKey = privateKey.trim();
-      if (privateKey.startsWith('"') && privateKey.endsWith('"')) {
-        privateKey = privateKey.substring(1, privateKey.length - 1);
-      }
-      privateKey = privateKey.replace(/\\n/g, '\n');
-    }
-
-    if (!sheetId || !clientEmail || !privateKey) {
-      return res.status(500).json({ 
-        status: 'error', 
-        message: 'Missing credentials',
-        config: {
-          hasSheetId: !!sheetId,
-          hasEmail: !!clientEmail,
-          hasKey: !!privateKey
-        }
-      });
-    }
-
-    const serviceAccountAuth = new JWT({
-      email: clientEmail,
-      key: privateKey,
-      scopes: ['https://www.googleapis.com/auth/spreadsheets'],
-    });
-
-    const doc = new GoogleSpreadsheet(sheetId, serviceAccountAuth);
-    await doc.loadInfo();
-    
-    const sheet = doc.sheetsByIndex[0];
-    await sheet.addRow({
-      'Date': new Date().toLocaleString(),
-      'Type': 'TEST',
-      'Order ID': `TEST-${Date.now()}`,
-      'Status': 'Verified',
-      'Name': 'Test System',
-      'Email': 'test@humanspace.com',
-      'Phone': '000-000-0000',
-      'Country': 'UAE',
-      'Province': 'Dubai',
-      'Address': 'Test Office 101',
-      'Items/Message': 'This is a automated test entry to verify the Google Sheets integration is working correctly with your new headers.',
-      'Total (AED)': '0',
-      'Notes/Subject': 'System Verification'
-    });
-    
-    return res.status(200).json({ 
-      status: 'success', 
-      message: 'Test entry added successfully! Please check your Google Sheet.',
-      title: doc.title,
-      sheets: doc.sheetCount
-    });
-  } catch (error) {
-    const err = error as { message?: string };
-    return res.status(500).json({ 
-      status: 'error', 
-      message: 'Test failed',
-      details: err.message || (typeof err === 'string' ? err : JSON.stringify(err))
-    });
   }
 });
 
