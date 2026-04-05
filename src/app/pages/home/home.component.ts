@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,7 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
   selector: 'app-home',
   standalone: true,
   imports: [RouterLink, ProductCardComponent, MatIconModule, QuoteCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen">
       <!-- Hero Section -->
@@ -35,7 +36,7 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
             <a routerLink="/shop" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-sm text-white bg-gray-900 hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
               Shop Collection
             </a>
-            <a routerLink="/shop" class="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-base font-medium rounded-sm text-gray-900 bg-white hover:bg-gray-50 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
+            <a routerLink="/best-sellers" class="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-base font-medium rounded-sm text-gray-900 bg-white hover:bg-gray-50 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
               Best of 2025
             </a>
           </div>

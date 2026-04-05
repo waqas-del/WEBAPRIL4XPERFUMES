@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { CartService } from '../../services/cart.service';
@@ -7,6 +7,7 @@ import { CartService } from '../../services/cart.service';
   selector: 'app-navbar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, MatIconModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -23,16 +24,15 @@ import { CartService } from '../../services/cart.service';
           <nav class="hidden md:flex space-x-8">
             <a routerLink="/" routerLinkActive="text-gold-600" [routerLinkActiveOptions]="{exact: true}" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">Home</a>
             <a routerLink="/shop" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">Shop Collection</a>
-            <a routerLink="/shop" [queryParams]="{ category: womensChoiceCategory }" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap">Best Sellers</a>
+            <a routerLink="/best-sellers" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap">Best Sellers</a>
+            <a routerLink="/new-arrivals" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap">New Arrivals</a>
             <a routerLink="/guide" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">Scent Guide</a>
-            <a routerLink="/about-us" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">About Us</a>
-            <a routerLink="/contact-us" routerLinkActive="text-gold-600" class="text-gray-600 hover:text-gold-500 px-3 py-2 text-sm font-medium transition-colors">Contact Us</a>
           </nav>
 
           <!-- Actions -->
           <div class="flex items-center space-x-2 sm:space-x-4">
             <!-- Best Sellers (Mobile only) -->
-            <a routerLink="/shop" [queryParams]="{ category: womensChoiceCategory }" 
+            <a routerLink="/best-sellers" routerLinkActive="text-gold-600"
                class="md:hidden text-gray-600 hover:text-gold-500 px-2 py-1 text-[10px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap">
               Best Sellers
             </a>

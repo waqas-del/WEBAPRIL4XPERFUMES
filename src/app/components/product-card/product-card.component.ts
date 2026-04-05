@@ -1,66 +1,106 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ChangeDetectionStrategy, signal, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { Product } from '../../models/product.model';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
   imports: [RouterLink, MatIconModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <a [routerLink]="['/product', product().slug]" class="group block h-full">
-      <div class="border p-6 h-full flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] relative overflow-hidden"
-           [class]="themeClasses().container">
-        
-        <!-- Subtle accent line -->
-        <div class="absolute top-0 left-0 w-full h-1 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
-             [class]="themeClasses().accentLine"></div>
+    <div class="group block h-full relative">
+      <!-- Action Buttons (Top Right) -->
+      <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <button (click)="toggleFavorite($event)" 
+                (keydown.enter)="toggleFavorite($event)"
+                aria-label="Add to favorites"
+                [class.text-rose-500]="isFavorite()" [class.bg-rose-50]="isFavorite()"
+                [class.text-gray-400]="!isFavorite()" [class.bg-white]="!isFavorite()"
+                class="w-8 h-8 rounded-full shadow-md flex items-center justify-center transition-all hover:scale-110 active:scale-95 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-rose-400">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
+        </button>
+        <button (click)="toggleCompare($event)" 
+                (keydown.enter)="toggleCompare($event)"
+                aria-label="Add to compare"
+                [class.text-gold-600]="isCompare()" [class.bg-gold-50]="isCompare()"
+                [class.text-gray-400]="!isCompare()" [class.bg-white]="!isCompare()"
+                class="w-8 h-8 rounded-full shadow-md flex items-center justify-center transition-all hover:scale-110 active:scale-95 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-gold-400">
+          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ isCompare() ? 'compare_arrows' : 'compare_arrows' }}</mat-icon>
+        </button>
+      </div>
 
-        <div class="mb-4 relative z-10">
-          <p class="text-xs uppercase tracking-widest mb-1" [class]="themeClasses().brandText">{{ product().brand }}</p>
-          <h3 class="text-xl font-serif transition-colors" [class]="themeClasses().titleText">{{ product().name }}</h3>
-        </div>
-        
-        <div class="flex-grow relative z-10">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="text-xs px-2 py-1 rounded-sm" [class]="themeClasses().badge">{{ product().gender }}</span>
-            <span class="text-xs px-2 py-1 rounded-sm" [class]="themeClasses().badge">{{ product().category }}</span>
+      <a [routerLink]="['/product', product().slug]" class="block h-full">
+        <div class="border p-6 h-full flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] relative overflow-hidden"
+             [class]="themeClasses().container">
+          
+          <!-- Subtle accent line -->
+          <div class="absolute top-0 left-0 w-full h-1 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
+               [class]="themeClasses().accentLine"></div>
+
+          <div class="mb-4 relative z-10">
+            <p class="text-xs uppercase tracking-widest mb-1" [class]="themeClasses().brandText">{{ product().brand }}</p>
+            <h3 class="text-xl font-serif transition-colors" [class]="themeClasses().titleText">{{ product().name }}</h3>
           </div>
           
-          <div class="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-300 ease-in-out">
-            <div class="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
-              <p class="text-sm line-clamp-3 mb-4 mt-1" [class]="themeClasses().notesText">
-                <span class="font-medium" [class]="themeClasses().notesLabel">Key Notes:</span> {{ product().keyNotes }}
-              </p>
+          <div class="flex-grow relative z-10">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-xs px-2 py-1 rounded-sm" [class]="themeClasses().badge">{{ product().gender }}</span>
+              <span class="text-xs px-2 py-1 rounded-sm" [class]="themeClasses().badge">{{ product().category }}</span>
+            </div>
+            
+            <div class="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-300 ease-in-out">
+              <div class="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
+                <p class="text-sm line-clamp-3 mb-4 mt-1" [class]="themeClasses().notesText">
+                  <span class="font-medium" [class]="themeClasses().notesLabel">Key Notes:</span> {{ product().keyNotes }}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="mt-auto pt-4 border-t flex items-end justify-between relative z-10" [class]="themeClasses().divider">
-          <div>
-            <p class="text-[10px] uppercase tracking-wider mb-0.5" [class]="themeClasses().originalPrice">Original: <span class="line-through">{{ product().originalPrice }} AED</span></p>
-            <p class="text-sm font-medium flex items-baseline gap-1" [class]="themeClasses().impressionPriceContainer">
-              <span class="text-[10px] uppercase tracking-wider mr-1" [class]="themeClasses().impressionLabel">Impression:</span>
-              <span class="text-2xl font-bold" [class]="themeClasses().impressionPrice">{{ product().impressionPrice }} AED</span>
-            </p>
+          
+          <div class="mt-auto pt-4 border-t flex items-end justify-between relative z-10" [class]="themeClasses().divider">
+            <div>
+              <p class="text-[10px] uppercase tracking-wider mb-0.5" [class]="themeClasses().originalPrice">Original: <span class="line-through">{{ product().originalPrice }} AED</span></p>
+              <p class="text-sm font-medium flex items-baseline gap-1" [class]="themeClasses().impressionPriceContainer">
+                <span class="text-[10px] uppercase tracking-wider mr-1" [class]="themeClasses().impressionLabel">Impression:</span>
+                <span class="text-2xl font-bold" [class]="themeClasses().impressionPrice">{{ product().impressionPrice }} AED</span>
+              </p>
+            </div>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" [class]="themeClasses().arrowBtn">
+              <mat-icon class="text-sm" style="font-size: 16px; width: 16px; height: 16px;">arrow_forward</mat-icon>
+            </div>
           </div>
-          <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" [class]="themeClasses().arrowBtn">
-            <mat-icon class="text-sm" style="font-size: 16px; width: 16px; height: 16px;">arrow_forward</mat-icon>
-          </div>
+          
+          <!-- Background decorative gradient for ranked cards -->
+          @if (rank() !== 'default') {
+            <div class="absolute -right-12 -bottom-12 w-40 h-40 rounded-full mix-blend-multiply filter blur-3xl opacity-40 z-0"
+                 [class]="themeClasses().bgGlow"></div>
+          }
         </div>
-        
-        <!-- Background decorative gradient for ranked cards -->
-        @if (rank() !== 'default') {
-          <div class="absolute -right-12 -bottom-12 w-40 h-40 rounded-full mix-blend-multiply filter blur-3xl opacity-40 z-0"
-               [class]="themeClasses().bgGlow"></div>
-        }
-      </div>
-    </a>
+      </a>
+    </div>
   `
 })
 export class ProductCardComponent {
+  private cartService = inject(CartService);
   product = input.required<Product>();
   rank = input<'gold' | 'silver' | 'bronze' | 'default'>('default');
+
+  isFavorite = signal(false);
+  isCompare = computed(() => this.cartService.isInCompare(this.product().id));
+
+  toggleFavorite(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isFavorite.update(v => !v);
+  }
+
+  toggleCompare(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.cartService.toggleCompare(this.product());
+  }
 
   themeClasses = computed(() => {
     const r = this.rank();

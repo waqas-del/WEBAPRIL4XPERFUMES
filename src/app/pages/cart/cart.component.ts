@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { CartService } from '../../services/cart.service';
@@ -7,6 +7,7 @@ import { CartService } from '../../services/cart.service';
   selector: 'app-cart',
   standalone: true,
   imports: [RouterLink, MatIconModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen bg-gray-50 py-12">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

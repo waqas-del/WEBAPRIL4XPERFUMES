@@ -9,6 +9,7 @@ export class CartService {
   private platformId = inject(PLATFORM_ID);
 
   cartItems = signal<CartItem[]>([]);
+  compareList = signal<Product[]>([]);
 
   cartTotal = computed(() => {
     return this.cartItems().reduce((total, item) => total + (item.product.impressionPrice * item.quantity), 0);
@@ -18,13 +19,23 @@ export class CartService {
     return this.cartItems().reduce((count, item) => count + item.quantity, 0);
   });
 
+  compareCount = computed(() => this.compareList().length);
+
   constructor() {
     this.loadCart();
+    this.loadCompare();
     
     // Save to local storage whenever cart changes
     effect(() => {
       if (isPlatformBrowser(this.platformId)) {
         localStorage.setItem('x-perfumes-cart', JSON.stringify(this.cartItems()));
+      }
+    });
+
+    // Save to local storage whenever compare list changes
+    effect(() => {
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('x-perfumes-compare', JSON.stringify(this.compareList()));
       }
     });
   }
@@ -40,6 +51,37 @@ export class CartService {
         }
       }
     }
+  }
+
+  private loadCompare() {
+    if (isPlatformBrowser(this.platformId)) {
+      const savedCompare = localStorage.getItem('x-perfumes-compare');
+      if (savedCompare) {
+        try {
+          this.compareList.set(JSON.parse(savedCompare));
+        } catch (e) {
+          console.error('Failed to parse compare list from local storage', e);
+        }
+      }
+    }
+  }
+
+  toggleCompare(product: Product) {
+    this.compareList.update(list => {
+      const exists = list.find(p => p.id === product.id);
+      if (exists) {
+        return list.filter(p => p.id !== product.id);
+      }
+      // Limit to 4 products for comparison
+      if (list.length >= 4) {
+        return list;
+      }
+      return [...list, product];
+    });
+  }
+
+  isInCompare(productId: string) {
+    return !!this.compareList().find(p => p.id === productId);
   }
 
   addToCart(product: Product, quantity = 1) {

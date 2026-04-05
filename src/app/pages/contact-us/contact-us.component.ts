@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-contact-us',
   standalone: true,
   imports: [ReactiveFormsModule, MatIconModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen bg-white py-24">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,7 +71,7 @@ import { MatIconModule } from '@angular/material/icon';
           <div class="bg-white p-8 md:p-12 rounded-2xl border border-gray-100 shadow-2xl shadow-gray-200/40">
             <h2 class="text-2xl font-serif font-bold text-gray-900 mb-8">Send a Message</h2>
             
-            @if (isSubmitted) {
+            @if (isSubmitted()) {
               <div class="bg-green-50 border border-green-200 text-green-800 rounded-xl p-6 mb-8 flex items-start gap-4">
                 <mat-icon class="text-green-600 mt-0.5">check_circle</mat-icon>
                 <div>
@@ -124,7 +125,7 @@ import { MatIconModule } from '@angular/material/icon';
               </div>
               
               <button type="submit" [disabled]="!canSubmit" class="w-full bg-gray-900 text-white px-8 py-4 rounded-lg text-sm font-bold uppercase tracking-widest hover:bg-gold-600 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-                @if (isSubmitting) {
+                @if (isSubmitting()) {
                   <div class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 } @else {
                   <mat-icon style="font-size: 18px; width: 18px; height: 18px;">send</mat-icon>
@@ -157,8 +158,8 @@ export class ContactUsComponent {
     securityAnswer: ['', Validators.required]
   });
   
-  isSubmitted = false;
-  isSubmitting = false;
+  isSubmitted = signal(false);
+  isSubmitting = signal(false);
 
   get isSecurityValid(): boolean {
     const answer = this.contactForm.get('securityAnswer')?.value;
@@ -166,20 +167,20 @@ export class ContactUsComponent {
   }
 
   get canSubmit(): boolean {
-    return this.contactForm.valid && this.isSecurityValid && !this.contactForm.get('honeypot')?.value && !this.isSubmitting;
+    return this.contactForm.valid && this.isSecurityValid && !this.contactForm.get('honeypot')?.value && !this.isSubmitting();
   }
 
   onSubmit() {
     if (this.canSubmit) {
-      this.isSubmitting = true;
+      this.isSubmitting.set(true);
       
       const formValues = this.contactForm.value;
       const formBody = new URLSearchParams();
-      formBody.append('entry.1779450718', formValues.name || '');
-      formBody.append('entry.599073223', formValues.email || '');
-      formBody.append('entry.1885144381', formValues.phone || '');
-      formBody.append('entry.1656045276', formValues.subject || '');
-      formBody.append('entry.2069774174', formValues.message || '');
+      formBody.append('entry.1789131805', formValues.name || '');
+      formBody.append('entry.12857435', formValues.email || '');
+      formBody.append('entry.652682991', formValues.phone || '');
+      formBody.append('entry.2045204214', formValues.subject || '');
+      formBody.append('entry.1008221946', formValues.message || '');
 
       const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSex-tZ_DPfD40xo3ilHGKkVSJqmR5bDruDxwtKhUY_5GXT1zw/formResponse';
 
@@ -191,20 +192,20 @@ export class ContactUsComponent {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).then(() => {
-        this.isSubmitted = true;
-        this.isSubmitting = false;
+        this.isSubmitted.set(true);
+        this.isSubmitting.set(false);
         this.contactForm.reset();
         this.generateNewChallenge();
         
         // Hide the success message after 5 seconds
         setTimeout(() => {
-          this.isSubmitted = false;
+          this.isSubmitted.set(false);
         }, 5000);
       }).catch(err => {
         console.error('Failed to send contact message to Google Forms:', err);
         // Still show success to user but log error
-        this.isSubmitted = true;
-        this.isSubmitting = false;
+        this.isSubmitted.set(true);
+        this.isSubmitting.set(false);
         this.contactForm.reset();
         this.generateNewChallenge();
       });

@@ -2659,7 +2659,1619 @@ export class ProductService {
         "persona": "Confident visible leader.",
         "isTopPick": false
     }
-];
+,
+    {
+    "id": "bs-0",
+    "name": "Baccarat Rouge 540 EDP",
+    "brand": "Maison Francis Kurkdjian",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Saffron, Jasmine, Amberwood, Fir Resin",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening, Dates",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2015,
+    "perfumer": "Francis Kurkdjian",
+    "originalPrice": 1100,
+    "pros": [
+        "Massive compliment getter"
+    ],
+    "cons": [
+        "Highly ubiquitous"
+    ],
+    "comment": "A modern legend; sweet, airy, and metallic.",
+    "profession": "Entrepreneur",
+    "persona": "Elegant, Wealthy",
+    "isTopPick": true
+},
+    {
+    "id": "bs-1",
+    "name": "Blue Talisman",
+    "brand": "Ex Nihilo",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Woody Fruity",
+    "keyNotes": "Pear, Bergamot, Musk, Akigalawood",
+    "whenToWear": "All Year",
+    "bestOccasion": "Signature Scent",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2023,
+    "perfumer": "Jordi Fernández",
+    "originalPrice": 1250,
+    "pros": [
+        "Incredibly fresh and unique"
+    ],
+    "cons": [
+        "High price point"
+    ],
+    "comment": "A modern, high-end fruity-wood signature.",
+    "profession": "Creative Director",
+    "persona": "Trendy, Sophisticated",
+    "isTopPick": true
+},
+    {
+    "id": "bs-2",
+    "name": "Invictus EDT",
+    "brand": "Paco Rabanne",
+    "category": "Designer",
+    "gender": "Male",
+    "olfactoryFamily": "Woody Aquatic",
+    "keyNotes": "Grapefruit, Marine Notes, Bay Leaf",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Casual, Gym",
+    "longevity": "Moderate",
+    "sillage": "Strong",
+    "year": 2013,
+    "perfumer": "V. Nyberg, A. Flipo",
+    "originalPrice": 400,
+    "pros": [
+        "Mass appealing; great starter"
+    ],
+    "cons": [
+        "Can smell synthetic"
+    ],
+    "comment": "The ultimate youthful, energetic \"shower fresh\" scent.",
+    "profession": "Athlete",
+    "persona": "Energetic, Youthful",
+    "isTopPick": true
+},
+    {
+    "id": "bs-3",
+    "name": "Black Sea",
+    "brand": "Lorenzo Pazzaglia",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Aromatic Aquatic",
+    "keyNotes": "Salt, Sea Notes, Ozone, Ambergris",
+    "whenToWear": "Summer",
+    "bestOccasion": "Beach, Casual",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2019,
+    "perfumer": "Lorenzo Pazzaglia",
+    "originalPrice": 650,
+    "pros": [
+        "Beast-mode aquatic performance"
+    ],
+    "cons": [
+        "Too salty for some"
+    ],
+    "comment": "An ultra-realistic, deep, and dark stormy ocean.",
+    "profession": "Sailor / Adventurer",
+    "persona": "Bold, Free-spirited",
+    "isTopPick": true
+},
+    {
+    "id": "bs-4",
+    "name": "Wavechild",
+    "brand": "Room 1015",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Citrus Aquatic",
+    "keyNotes": "Watermelon, Coconut, Ambergris",
+    "whenToWear": "Summer",
+    "bestOccasion": "Vacation, Beach",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2023,
+    "perfumer": "Jerome Epinette",
+    "originalPrice": 550,
+    "pros": [
+        "Fun, realistic watermelon note"
+    ],
+    "cons": [
+        "Fleeting longevity"
+    ],
+    "comment": "A playful, carefree summer scent in a bottle.",
+    "profession": "Surfer / Artist",
+    "persona": "Chill, Carefree",
+    "isTopPick": true
+},
+    {
+    "id": "bs-5",
+    "name": "Wanderlust",
+    "brand": "Omanluxury",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Fruity Green",
+    "keyNotes": "Lemon, Blackcurrant, Fig, Cedar",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Daytime, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2020,
+    "perfumer": "Jean-Louis Sieuzac",
+    "originalPrice": 850,
+    "pros": [
+        "Very green, fresh, and crisp"
+    ],
+    "cons": [
+        "Sharp opening"
+    ],
+    "comment": "An excellent, refined summer niche option.",
+    "profession": "Photographer",
+    "persona": "Adventurous, Refined",
+    "isTopPick": true
+},
+    {
+    "id": "bs-6",
+    "name": "Le Gemme Tygar",
+    "brand": "Bvlgari",
+    "category": "Niche",
+    "gender": "Male",
+    "olfactoryFamily": "Citrus Woody",
+    "keyNotes": "Grapefruit, Ambroxan, Woody Notes",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Signature, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2016,
+    "perfumer": "Jacques Cavallier",
+    "originalPrice": 1550,
+    "pros": [
+        "Ultra-luxurious and effervescent"
+    ],
+    "cons": [
+        "Very expensive"
+    ],
+    "comment": "The undisputed king of premium fresh fragrances.",
+    "profession": "Executive",
+    "persona": "Powerful, Charismatic",
+    "isTopPick": true
+},
+    {
+    "id": "bs-7",
+    "name": "Imagination",
+    "brand": "Louis Vuitton",
+    "category": "Niche",
+    "gender": "Male",
+    "olfactoryFamily": "Citrus Aromatic",
+    "keyNotes": "Citron, Black Tea, Ambroxan",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Daytime, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2021,
+    "perfumer": "Jacques Cavallier",
+    "originalPrice": 1300,
+    "pros": [
+        "Clean, soapy, uplifting tea note"
+    ],
+    "cons": [
+        "High price point"
+    ],
+    "comment": "Arguably the best fresh release from LV.",
+    "profession": "CEO / Consultant",
+    "persona": "Clean, Polished",
+    "isTopPick": true
+},
+    {
+    "id": "bs-8",
+    "name": "Y Eau de Parfum",
+    "brand": "YSL",
+    "category": "Designer",
+    "gender": "Male",
+    "olfactoryFamily": "Aromatic Fougere",
+    "keyNotes": "Apple, Sage, Woods, Tonka Bean",
+    "whenToWear": "All Year",
+    "bestOccasion": "Versatile, Clubbing",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2018,
+    "perfumer": "Dominique Ropion",
+    "originalPrice": 550,
+    "pros": [
+        "Extremely versatile; performs well"
+    ],
+    "cons": [
+        "A bit common/synthetic"
+    ],
+    "comment": "The ultimate modern \"blue\" fragrance.",
+    "profession": "Tech Bro / Manager",
+    "persona": "Confident, Outgoing",
+    "isTopPick": true
+},
+    {
+    "id": "bs-9",
+    "name": "Megamare",
+    "brand": "Orto Parisi",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Aromatic Aquatic",
+    "keyNotes": "Seaweed, Water Notes, Musk",
+    "whenToWear": "Summer/All Year",
+    "bestOccasion": "Outdoor Statement",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2019,
+    "perfumer": "Alessandro Gualtieri",
+    "originalPrice": 750,
+    "pros": [
+        "Nuclear longevity and projection"
+    ],
+    "cons": [
+        "Highly polarizing"
+    ],
+    "comment": "A challenging, deep, and mysterious dark marine scent.",
+    "profession": "Marine Biologist",
+    "persona": "Edgy, Mysterious",
+    "isTopPick": true
+},
+    {
+    "id": "bs-10",
+    "name": "Tonka Cola",
+    "brand": "Mancera",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Spicy",
+    "keyNotes": "Cherry, Cola, Cinnamon, Tonka",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Night Out, Casual",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2022,
+    "perfumer": "Pierre Montale",
+    "originalPrice": 550,
+    "pros": [
+        "Highly unique, fizzy cola note"
+    ],
+    "cons": [
+        "Can be overly sweet"
+    ],
+    "comment": "A fun, gourmand twist that smells like cherry cola.",
+    "profession": "DJ / Bartender",
+    "persona": "Fun, Quirky",
+    "isTopPick": true
+},
+    {
+    "id": "bs-11",
+    "name": "Fig Infusion",
+    "brand": "Essential Parfums",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Woody Fruity",
+    "keyNotes": "Fig, Black Tea, Sandalwood",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Relaxing, Casual",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2022,
+    "perfumer": "Nathalie Lorson",
+    "originalPrice": 350,
+    "pros": [
+        "Affordable niche; very comforting"
+    ],
+    "cons": [
+        "Average performance"
+    ],
+    "comment": "A calming, creamy, and green fig experience.",
+    "profession": "Writer / Designer",
+    "persona": "Calm, Intellectual",
+    "isTopPick": true
+},
+    {
+    "id": "bs-12",
+    "name": "Angels' Share On The Rocks",
+    "brand": "By Kilian",
+    "category": "Niche",
+    "gender": "Unisex",
+    "olfactoryFamily": "Oriental Woody",
+    "keyNotes": "Grapefruit, Ice Accord, Cognac, Cinnamon, Tonka",
+    "whenToWear": "Fall/Winter/Spring",
+    "bestOccasion": "Evening, Upscale Events",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2025,
+    "perfumer": "Benoist Lapouza",
+    "originalPrice": 1350,
+    "pros": [
+        "Beautiful fresh, icy contrast to the warm original"
+    ],
+    "cons": [
+        "High price point"
+    ],
+    "comment": "A bright, effervescent, and chilled citrus take on the iconic boozy DNA.",
+    "profession": "Executive",
+    "persona": "Sophisticated, Modern",
+    "isTopPick": true
+},
+    {
+    "id": "bs-13",
+    "name": "Aventus EDP",
+    "brand": "Creed",
+    "category": "Niche",
+    "gender": "Male",
+    "olfactoryFamily": "Chypre Fruity",
+    "keyNotes": "Pineapple, Birch, Musk, Oakmoss",
+    "whenToWear": "All Year",
+    "bestOccasion": "Signature, Office",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2010,
+    "perfumer": "J. Hérault, E. Creed",
+    "originalPrice": 1350,
+    "pros": [
+        "Legendary, mass-appealing DNA"
+    ],
+    "cons": [
+        "Batch variations; pricey"
+    ],
+    "comment": "The modern king of men's perfumery.",
+    "profession": "Entrepreneur",
+    "persona": "Alpha, Successful",
+    "isTopPick": true
+},
+    {
+    "id": "bs-14",
+    "name": "Bleu de Chanel EDP",
+    "brand": "Chanel",
+    "category": "Designer",
+    "gender": "Male",
+    "olfactoryFamily": "Woody Aromatic",
+    "keyNotes": "Grapefruit, Incense, Ginger, Woods",
+    "whenToWear": "All Year",
+    "bestOccasion": "Signature, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Moderate",
+    "year": 2014,
+    "perfumer": "Jacques Polge",
+    "originalPrice": 600,
+    "pros": [
+        "Perfectly balanced and classy"
+    ],
+    "cons": [
+        "Very widely worn"
+    ],
+    "comment": "The gold standard for the modern professional man.",
+    "profession": "Lawyer / Doctor",
+    "persona": "Professional, Classy",
+    "isTopPick": true
+},
+    {
+    "id": "bs-15",
+    "name": "Good Girl EDP",
+    "brand": "Carolina Herrera",
+    "category": "Designer",
+    "gender": "Female",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Almond, Tuberose, Tonka, Cocoa",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Date Night, Clubbing",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2016,
+    "perfumer": "Louise Turner",
+    "originalPrice": 550,
+    "pros": [
+        "Sexy, alluring, and rich"
+    ],
+    "cons": [
+        "Stiletto bottle is polarizing"
+    ],
+    "comment": "A fantastic, sweet evening scent with great presence.",
+    "profession": "PR Manager",
+    "persona": "Sassy, Confident",
+    "isTopPick": true
+},
+    {
+    "id": "bs-16",
+    "name": "Coco Mademoiselle",
+    "brand": "Chanel",
+    "category": "Designer",
+    "gender": "Female",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Orange, Patchouli, Rose",
+    "whenToWear": "All Year",
+    "bestOccasion": "Signature, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2001,
+    "perfumer": "Jacques Polge",
+    "originalPrice": 700,
+    "pros": [
+        "Elegant, timeless, and bright"
+    ],
+    "cons": [
+        "Extremely common"
+    ],
+    "comment": "A flawless modern classic for women.",
+    "profession": "Realtor / Exec",
+    "persona": "Chic, Independent",
+    "isTopPick": true
+},
+    {
+    "id": "bs-17",
+    "name": "Miss Dior EDP",
+    "brand": "Dior",
+    "category": "Designer",
+    "gender": "Female",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Iris, Peony, Rose, Vanilla",
+    "whenToWear": "Spring / All Year",
+    "bestOccasion": "Daytime, Romantic",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2021,
+    "perfumer": "François Demachy",
+    "originalPrice": 700,
+    "pros": [
+        "Sweet, pretty, and highly feminine"
+    ],
+    "cons": [
+        "Has been reformulated often"
+    ],
+    "comment": "A beautiful, powdery, and romantic floral bouquet.",
+    "profession": "Wedding Planner",
+    "persona": "Sweet, Graceful",
+    "isTopPick": true
+},
+    {
+    "id": "bs-18",
+    "name": "Flora Gorgeous Gardenia",
+    "brand": "Gucci",
+    "category": "Designer",
+    "gender": "Female",
+    "olfactoryFamily": "Floral",
+    "keyNotes": "Pear Blossom, Gardenia, Brown Sugar",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Daytime, Casual",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2021,
+    "perfumer": "H. Blanc, A. Morillas",
+    "originalPrice": 600,
+    "pros": [
+        "Beautifully uplifting and happy"
+    ],
+    "cons": [
+        "Short-lived longevity"
+    ],
+    "comment": "The perfect joyful, sweet spring scent.",
+    "profession": "Florist / Stylist",
+    "persona": "Joyful, Radiant",
+    "isTopPick": true
+},
+    {
+    "id": "bs-19",
+    "name": "Love, Don't Be Shy",
+    "brand": "By Kilian",
+    "category": "Niche",
+    "gender": "Female",
+    "olfactoryFamily": "Amber",
+    "keyNotes": "Neroli, Orange Blossom, Marshmallow",
+    "whenToWear": "Fall/Winter/Spring",
+    "bestOccasion": "Dates, Special Events",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2007,
+    "perfumer": "Calice Becker",
+    "originalPrice": 1100,
+    "pros": [
+        "Intoxicatingly sweet and sexy"
+    ],
+    "cons": [
+        "Can be too syrupy for some"
+    ],
+    "comment": "Famous as \"Rihanna's perfume\"; a marshmallow dream.",
+    "profession": "Singer / Influencer",
+    "persona": "Sweet, Flirtatious",
+    "isTopPick": true
+},
+    {
+    "id": "na-0",
+    "name": "Outlands",
+    "brand": "Amouge",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Woody Aromatic",
+    "keyNotes": "Woods, Spices, Earthy Notes",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2025,
+    "perfumer": "N/A",
+    "originalPrice": 400,
+    "pros": [
+        "Unique niche profile"
+    ],
+    "cons": [
+        "Hard to find"
+    ],
+    "comment": "A rare or boutique offering with limited mainstream data.",
+    "profession": "Explorer",
+    "persona": "Enigmatic",
+    "isTopPick": false
+},
+    {
+    "id": "na-1",
+    "name": "Black Sea",
+    "brand": "Lorenzo Pazzaglia",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Aromatic Aquatic",
+    "keyNotes": "Salt, Sea Notes, Ozone, Ambergris",
+    "whenToWear": "Summer",
+    "bestOccasion": "Beach, Casual",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2019,
+    "perfumer": "Lorenzo Pazzaglia",
+    "originalPrice": 650,
+    "pros": [
+        "Beast-mode aquatic performance"
+    ],
+    "cons": [
+        "Too salty for some"
+    ],
+    "comment": "An ultra-realistic, deep, and dark stormy ocean.",
+    "profession": "Sailor",
+    "persona": "Bold, Free-spirited",
+    "isTopPick": false
+},
+    {
+    "id": "na-2",
+    "name": "Wavechild",
+    "brand": "Room 1015",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Citrus Aquatic",
+    "keyNotes": "Watermelon, Coconut, Ambergris",
+    "whenToWear": "Summer",
+    "bestOccasion": "Vacation, Beach",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2023,
+    "perfumer": "Jerome Epinette",
+    "originalPrice": 550,
+    "pros": [
+        "Fun, realistic watermelon note"
+    ],
+    "cons": [
+        "Fleeting longevity"
+    ],
+    "comment": "A playful, carefree summer scent in a bottle.",
+    "profession": "Surfer / Artist",
+    "persona": "Chill, Carefree",
+    "isTopPick": false
+},
+    {
+    "id": "na-3",
+    "name": "Blanche Bête",
+    "brand": "Les Liquides Imaginaires",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Floral Woody Musk",
+    "keyNotes": "Milk, Tuberose, Vanilla, Cacao",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Cozy Days, Dates",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2021,
+    "perfumer": "Louise Turner",
+    "originalPrice": 1100,
+    "pros": [
+        "Incredibly creamy, dreamy, and lactonic"
+    ],
+    "cons": [
+        "Milky notes can be cloying"
+    ],
+    "comment": "Smells like a mythical, luxurious white chocolate cloud.",
+    "profession": "Illustrator",
+    "persona": "Ethereal, Gentle",
+    "isTopPick": false
+},
+    {
+    "id": "na-4",
+    "name": "Crying of Evil",
+    "brand": "Stéphane Humbert Lucas",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Spices, Tuberose, Leather, Amber",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening, Formal",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2022,
+    "perfumer": "Stéphane Humbert Lucas",
+    "originalPrice": 1200,
+    "pros": [
+        "Dark, mysterious, and beautifully blended"
+    ],
+    "cons": [
+        "Very heavy"
+    ],
+    "comment": "A gothic, sensual, and spicy leather-floral masterpiece.",
+    "profession": "Creative Director",
+    "persona": "Mysterious, Edgy",
+    "isTopPick": false
+},
+    {
+    "id": "na-5",
+    "name": "Wanderlust",
+    "brand": "Oman Luxury",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Fruity Green",
+    "keyNotes": "Lemon, Blackcurrant, Fig, Cedar",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Daytime, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2020,
+    "perfumer": "Jean-Louis Sieuzac",
+    "originalPrice": 850,
+    "pros": [
+        "Very green, fresh, and crisp"
+    ],
+    "cons": [
+        "Sharp opening"
+    ],
+    "comment": "An excellent, refined summer niche option.",
+    "profession": "Photographer",
+    "persona": "Adventurous",
+    "isTopPick": false
+},
+    {
+    "id": "na-6",
+    "name": "Molecule 02",
+    "brand": "Escentric Molecules",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber",
+    "keyNotes": "Ambroxan",
+    "whenToWear": "All Year",
+    "bestOccasion": "Layering, Signature",
+    "longevity": "Moderate",
+    "sillage": "Intimate",
+    "year": 2008,
+    "perfumer": "Geza Schoen",
+    "originalPrice": 550,
+    "pros": [
+        "Enhances other perfumes perfectly"
+    ],
+    "cons": [
+        "Some people are nose-blind to it"
+    ],
+    "comment": "A pure, skin-like aura rather than a traditional perfume.",
+    "profession": "Architect",
+    "persona": "Minimalist",
+    "isTopPick": false
+},
+    {
+    "id": "na-7",
+    "name": "Crystal Saffron",
+    "brand": "Matiere Premiere",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Spicy",
+    "keyNotes": "Saffron, Musk, Ambroxan",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Statement Scent",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2022,
+    "perfumer": "Aurelien Guichard",
+    "originalPrice": 850,
+    "pros": [
+        "Bright, crystalline, realistic saffron"
+    ],
+    "cons": [
+        "Very sharp and piercing"
+    ],
+    "comment": "A loud, modern, and highly addictive saffron bomb.",
+    "profession": "Fashion Stylist",
+    "persona": "Bold, Trendsetter",
+    "isTopPick": false
+},
+    {
+    "id": "na-8",
+    "name": "Vanilla Powder",
+    "brand": "Matiere Premiere",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Woody",
+    "keyNotes": "Vanilla, Coconut, Palo Santo",
+    "whenToWear": "All Year",
+    "bestOccasion": "Casual, Signature",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2023,
+    "perfumer": "Aurelien Guichard",
+    "originalPrice": 850,
+    "pros": [
+        "Dry, non-gourmand, sophisticated vanilla"
+    ],
+    "cons": [
+        "Powdery notes aren't for everyone"
+    ],
+    "comment": "A beautiful, dusty, and woody take on vanilla.",
+    "profession": "Baker / Curator",
+    "persona": "Warm, Refined",
+    "isTopPick": false
+},
+    {
+    "id": "na-9",
+    "name": "Falcon Leather",
+    "brand": "Matiere Premiere",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Leather",
+    "keyNotes": "Saffron, Birch Tar, Benzoin",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Formal, Evening",
+    "longevity": "Eternal",
+    "sillage": "Strong",
+    "year": 2019,
+    "perfumer": "Aurelien Guichard",
+    "originalPrice": 850,
+    "pros": [
+        "Ultra-realistic, smoky, premium leather"
+    ],
+    "cons": [
+        "Very rugged"
+    ],
+    "comment": "Smells exactly like the inside of a luxury sports car.",
+    "profession": "Executive",
+    "persona": "Powerful, Assertive",
+    "isTopPick": false
+},
+    {
+    "id": "na-10",
+    "name": "Irish Leather",
+    "brand": "Memo Paris",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Leather",
+    "keyNotes": "Juniper Berries, Mate, Leather",
+    "whenToWear": "Spring/Fall",
+    "bestOccasion": "Signature, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2013,
+    "perfumer": "Alienor Massenet",
+    "originalPrice": 1050,
+    "pros": [
+        "Fresh, green, and highly elegant"
+    ],
+    "cons": [
+        "Leather can be a bit harsh initially"
+    ],
+    "comment": "Evokes a crisp morning horseback ride through the countryside.",
+    "profession": "Equestrian",
+    "persona": "Classy, Outdoorsy",
+    "isTopPick": false
+},
+    {
+    "id": "na-11",
+    "name": "Angels' Share On The Rocks",
+    "brand": "By Kilian",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Oriental Woody",
+    "keyNotes": "Grapefruit, Ice Accord, Cognac, Cinnamon",
+    "whenToWear": "Fall/Winter/Spring",
+    "bestOccasion": "Evening, Upscale",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2025,
+    "perfumer": "Benoist Lapouza",
+    "originalPrice": 1350,
+    "pros": [
+        "Beautiful fresh, icy contrast to the warm original"
+    ],
+    "cons": [
+        "High price point"
+    ],
+    "comment": "A bright, effervescent, and chilled citrus take on the boozy DNA.",
+    "profession": "Investor",
+    "persona": "Sophisticated",
+    "isTopPick": false
+},
+    {
+    "id": "na-12",
+    "name": "Smoking Hot",
+    "brand": "By Kilian",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Spicy",
+    "keyNotes": "Apple, Hookah Smoke, Tobacco, Vanilla",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Night Out",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2023,
+    "perfumer": "Mathieu Nardin",
+    "originalPrice": 1100,
+    "pros": [
+        "Intoxicating apple-shisha vibe"
+    ],
+    "cons": [
+        "Can lean too sweet"
+    ],
+    "comment": "Perfectly captures the scent of high-end apple hookah.",
+    "profession": "Nightclub Owner",
+    "persona": "Charismatic",
+    "isTopPick": false
+},
+    {
+    "id": "na-13",
+    "name": "Bois Impérial",
+    "brand": "Essential Parfums",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Woody",
+    "keyNotes": "Akigalawood, Vetiver, Basil",
+    "whenToWear": "All Year",
+    "bestOccasion": "Signature, Office",
+    "longevity": "Eternal",
+    "sillage": "Strong",
+    "year": 2020,
+    "perfumer": "Quentin Bisch",
+    "originalPrice": 350,
+    "pros": [
+        "Incredible value; crisp and modern"
+    ],
+    "cons": [
+        "Can smell slightly synthetic"
+    ],
+    "comment": "A fantastic, metallic, woody-fresh signature scent.",
+    "profession": "Consultant",
+    "persona": "Sharp, Professional",
+    "isTopPick": false
+},
+    {
+    "id": "na-14",
+    "name": "Impadia",
+    "brand": "BDK Parfums",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Floral Fruity Gourmand",
+    "keyNotes": "Pear, Mandarin, Turkish Rose, Vanilla, Akigalawood",
+    "whenToWear": "Spring/Fall",
+    "bestOccasion": "Signature, Daytime",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2025,
+    "perfumer": "Jordi Fernández",
+    "originalPrice": 1100,
+    "pros": [
+        "Mass-appealing, juicy pear & gorgeous rose"
+    ],
+    "cons": [
+        "Can be overpowering; similar to other popular rose scents"
+    ],
+    "comment": "A radiant, modern fruity-floral that perfectly captures a vibrant Parisian sunset.",
+    "profession": "Fashion Editor",
+    "persona": "Radiant, Elegant",
+    "isTopPick": false
+},
+    {
+    "id": "na-15",
+    "name": "Tilia",
+    "brand": "Marc-Antoine Barrois",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Floral Woody",
+    "keyNotes": "Linden Blossom, Broom, Vetiver",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Daytime, Casual",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2024,
+    "perfumer": "Quentin Bisch",
+    "originalPrice": 800,
+    "pros": [
+        "Sunny, optimistic, and beautifully floral"
+    ],
+    "cons": [
+        "High pollen-like scent profile"
+    ],
+    "comment": "A radiant, modern floral that smells like a warm summer day.",
+    "profession": "Florist / Stylist",
+    "persona": "Joyful, Radiant",
+    "isTopPick": false
+},
+    {
+    "id": "na-16",
+    "name": "Oud Maracujá",
+    "brand": "Maison Crivelli",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Leather Fruity",
+    "keyNotes": "Passionfruit, Oud, Saffron, Leather",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening, Statement",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2023,
+    "perfumer": "Jordi Fernández",
+    "originalPrice": 1100,
+    "pros": [
+        "Brilliant contrast of tropical and dark"
+    ],
+    "cons": [
+        "Oud is very dominant"
+    ],
+    "comment": "A loud, polarizing, but stunning tropical oud masterpiece.",
+    "profession": "Art Dealer",
+    "persona": "Avant-Garde",
+    "isTopPick": false
+},
+    {
+    "id": "na-17",
+    "name": "LV Lovers",
+    "brand": "Louis Vuitton",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Woody Floral",
+    "keyNotes": "Galbanum, Cedar, Sandalwood",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Casual, Daytime",
+    "longevity": "Long-lasting",
+    "sillage": "Moderate",
+    "year": 2024,
+    "perfumer": "Jacques Cavallier",
+    "originalPrice": 1300,
+    "pros": [
+        "Smooth, uplifting, and incredibly classy"
+    ],
+    "cons": [
+        "High price point"
+    ],
+    "comment": "A bright, green, and woody scent that oozes quiet luxury.",
+    "profession": "Tech Founder",
+    "persona": "Calm, Successful",
+    "isTopPick": false
+},
+    {
+    "id": "na-18",
+    "name": "Arabians Tonka",
+    "brand": "Montale",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Woody",
+    "keyNotes": "Saffron, Tonka Bean, Rose, Oud",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Clubbing, Evening",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2019,
+    "perfumer": "Pierre Montale",
+    "originalPrice": 550,
+    "pros": [
+        "Nuclear performance; sweet and loud"
+    ],
+    "cons": [
+        "Very aggressive projection"
+    ],
+    "comment": "The ultimate Middle Eastern-style clubbing fragrance.",
+    "profession": "DJ / Promoter",
+    "persona": "Loud, Outgoing",
+    "isTopPick": false
+},
+    {
+    "id": "na-19",
+    "name": "Portrait of a Lady",
+    "brand": "Frederic Malle",
+    "category": "New Arrivals",
+    "gender": "Female*",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Rose, Patchouli, Incense, Clove",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Formal, Special Events",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2010,
+    "perfumer": "Dominique Ropion",
+    "originalPrice": 1400,
+    "pros": [
+        "The undisputed queen of rose-patchouli"
+    ],
+    "cons": [
+        "Too mature for some"
+    ],
+    "comment": "A majestic, gothic, and incredibly wealthy-smelling masterpiece.",
+    "profession": "Aristocrat",
+    "persona": "Regal, Imposing",
+    "isTopPick": false
+},
+    {
+    "id": "na-20",
+    "name": "Burberry Weekend",
+    "brand": "Burberry",
+    "category": "New Arrivals",
+    "gender": "Female",
+    "olfactoryFamily": "Floral",
+    "keyNotes": "Nectarine, Peach Blossom, Mignonette",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Weekend, Casual",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 1997,
+    "perfumer": "Nathalie Lorson",
+    "originalPrice": 250,
+    "pros": [
+        "Easy-going, nostalgic, and happy"
+    ],
+    "cons": [
+        "Can feel a bit dated"
+    ],
+    "comment": "A classic, comforting 90s floral for relaxed days.",
+    "profession": "Teacher",
+    "persona": "Relaxed, Friendly",
+    "isTopPick": false
+},
+    {
+    "id": "na-21",
+    "name": "Guidance 46",
+    "brand": "Amouage",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Pear, Hazelnut, Rose, Sandalwood",
+    "whenToWear": "All Year",
+    "bestOccasion": "Statement Scent",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2024,
+    "perfumer": "Quentin Bisch",
+    "originalPrice": 1800,
+    "pros": [
+        "Richer, denser version of the hit original"
+    ],
+    "cons": [
+        "Extremely expensive"
+    ],
+    "comment": "A highly concentrated, creamy, and complex Extrait.",
+    "profession": "Socialite",
+    "persona": "Luxurious, Captivating",
+    "isTopPick": false
+},
+    {
+    "id": "na-22",
+    "name": "Le Gemme Tygar",
+    "brand": "Bvlgari",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Citrus Woody",
+    "keyNotes": "Grapefruit, Ambroxan, Woody Notes",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Signature, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2016,
+    "perfumer": "Jacques Cavallier",
+    "originalPrice": 1550,
+    "pros": [
+        "Ultra-luxurious and effervescent"
+    ],
+    "cons": [
+        "Very expensive"
+    ],
+    "comment": "The undisputed king of premium fresh fragrances.",
+    "profession": "CEO",
+    "persona": "Powerful, Charismatic",
+    "isTopPick": false
+},
+    {
+    "id": "na-23",
+    "name": "Imagination",
+    "brand": "Louis Vuitton",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Citrus Aromatic",
+    "keyNotes": "Citron, Black Tea, Ambroxan",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Daytime, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2021,
+    "perfumer": "Jacques Cavallier",
+    "originalPrice": 1300,
+    "pros": [
+        "Clean, soapy, uplifting tea note"
+    ],
+    "cons": [
+        "High price point"
+    ],
+    "comment": "Arguably the best fresh release from LV.",
+    "profession": "Doctor",
+    "persona": "Clean, Polished",
+    "isTopPick": false
+},
+    {
+    "id": "na-24",
+    "name": "Y Eau de Parfum",
+    "brand": "YSL",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Aromatic Fougere",
+    "keyNotes": "Apple, Sage, Woods, Tonka Bean",
+    "whenToWear": "All Year",
+    "bestOccasion": "Versatile, Clubbing",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2018,
+    "perfumer": "Dominique Ropion",
+    "originalPrice": 550,
+    "pros": [
+        "Extremely versatile; performs well"
+    ],
+    "cons": [
+        "A bit common/synthetic"
+    ],
+    "comment": "The ultimate modern \"blue\" fragrance.",
+    "profession": "Manager",
+    "persona": "Confident, Outgoing",
+    "isTopPick": false
+},
+    {
+    "id": "na-25",
+    "name": "Boss Bottled Elixir",
+    "brand": "Hugo Boss",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Amber Woody",
+    "keyNotes": "Frankincense, Vetiver, Cedar",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening, Formal",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2023,
+    "perfumer": "A. Menardo, S. Le Helley",
+    "originalPrice": 450,
+    "pros": [
+        "Dark, resinous, and surprisingly niche-quality"
+    ],
+    "cons": [
+        "Departs heavily from the original DNA"
+    ],
+    "comment": "A sophisticated, deep incense and woods powerhouse.",
+    "profession": "Executive",
+    "persona": "Mature, Grounded",
+    "isTopPick": false
+},
+    {
+    "id": "na-26",
+    "name": "Gentleman Society",
+    "brand": "Givenchy",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Woody Floral",
+    "keyNotes": "Cardamom, Vetiver, Vanilla, Narcissus",
+    "whenToWear": "Fall/Spring",
+    "bestOccasion": "Signature, Office",
+    "longevity": "Long-lasting",
+    "sillage": "Moderate",
+    "year": 2023,
+    "perfumer": "K. Dubreuil, M. Lernout",
+    "originalPrice": 500,
+    "pros": [
+        "Smooth, modern, and highly versatile"
+    ],
+    "cons": [
+        "Lacks the iris of previous flankers"
+    ],
+    "comment": "A very safe, contemporary woody-floral for the modern man.",
+    "profession": "Banker",
+    "persona": "Polished, Suave",
+    "isTopPick": false
+},
+    {
+    "id": "na-27",
+    "name": "Absolu Aventus",
+    "brand": "Creed",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Fruity Spicy",
+    "keyNotes": "Grapefruit, Pineapple, Ginger, Patchouli",
+    "whenToWear": "All Year",
+    "bestOccasion": "Signature",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2023,
+    "perfumer": "Creed",
+    "originalPrice": 1500,
+    "pros": [
+        "A richer, darker, spicier take on Aventus"
+    ],
+    "cons": [
+        "Extremely pricey; limited edition"
+    ],
+    "comment": "Adds a dark, wintery depth to the legendary Aventus DNA.",
+    "profession": "Entrepreneur",
+    "persona": "Alpha, Successful",
+    "isTopPick": false
+},
+    {
+    "id": "na-28",
+    "name": "Le Male Elixir",
+    "brand": "Jean Paul Gaultier",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Amber Fougere",
+    "keyNotes": "Lavender, Tonka, Honey, Tobacco",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Clubbing, Dates",
+    "longevity": "Eternal",
+    "sillage": "Strong",
+    "year": 2023,
+    "perfumer": "Quentin Bisch",
+    "originalPrice": 500,
+    "pros": [
+        "Incredibly sweet, seductive, and loud"
+    ],
+    "cons": [
+        "Can be overly cloying"
+    ],
+    "comment": "A massive compliment magnet for nightlife and winter.",
+    "profession": "Model / Athlete",
+    "persona": "Seductive, Playful",
+    "isTopPick": false
+},
+    {
+    "id": "na-29",
+    "name": "Althaïr",
+    "brand": "Parfums de Marly",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Amber Vanilla",
+    "keyNotes": "Orange Blossom, Vanilla, Praline",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Dates, Evening",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2023,
+    "perfumer": "H. Merati-Kashani",
+    "originalPrice": 1200,
+    "pros": [
+        "A beautiful, airy, spicy vanilla"
+    ],
+    "cons": [
+        "Very sweet for a male release"
+    ],
+    "comment": "A comforting, high-quality gourmand that smells edible.",
+    "profession": "Software Dev",
+    "persona": "Cozy, Inviting",
+    "isTopPick": false
+},
+    {
+    "id": "na-30",
+    "name": "Tabac Rose",
+    "brand": "BDK Parfums",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Plum, Rose, Tobacco, Chocolate",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2020,
+    "perfumer": "Julien Rasquinet",
+    "originalPrice": 850,
+    "pros": [
+        "Opulent, jammy, and rich"
+    ],
+    "cons": [
+        "Tobacco is quite dense"
+    ],
+    "comment": "A beautifully decadent blend of Turkish rose and rich tobacco.",
+    "profession": "Sommelier",
+    "persona": "Romantic, Deep",
+    "isTopPick": false
+},
+    {
+    "id": "na-31",
+    "name": "Side Effect",
+    "brand": "Initio",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber",
+    "keyNotes": "Rum, Vanilla, Tobacco, Cinnamon",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Dates, Night Out",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2016,
+    "perfumer": "Maurice Roucel",
+    "originalPrice": 1100,
+    "pros": [
+        "Intoxicating, boozy, and sexy"
+    ],
+    "cons": [
+        "Can overwhelm in tight spaces"
+    ],
+    "comment": "A dangerous, seductive scent perfect for a night on the town.",
+    "profession": "Bartender",
+    "persona": "Flirtatious, Bold",
+    "isTopPick": false
+},
+    {
+    "id": "na-32",
+    "name": "Atomic Rose",
+    "brand": "Initio",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Pink Pepper, Rose, Hedione, Vanilla",
+    "whenToWear": "All Year",
+    "bestOccasion": "Signature, Evening",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2019,
+    "perfumer": "Initio",
+    "originalPrice": 1100,
+    "pros": [
+        "Massive projection; modern jammy rose"
+    ],
+    "cons": [
+        "Very loud"
+    ],
+    "comment": "An explosive, electrified rose that demands attention.",
+    "profession": "PR Director",
+    "persona": "Confident, Loud",
+    "isTopPick": false
+},
+    {
+    "id": "na-33",
+    "name": "Radical Rose",
+    "brand": "Matiere Premiere",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Floral",
+    "keyNotes": "Saffron, Rose, Patchouli",
+    "whenToWear": "All Year",
+    "bestOccasion": "Signature, Formal",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2020,
+    "perfumer": "Aurelien Guichard",
+    "originalPrice": 850,
+    "pros": [
+        "Very realistic, earthy, high-dose rose"
+    ],
+    "cons": [
+        "Patchouli makes it a bit dirty"
+    ],
+    "comment": "A raw, natural, and incredibly high-quality rose experience.",
+    "profession": "Fashion Designer",
+    "persona": "Artistic, Grounded",
+    "isTopPick": false
+},
+    {
+    "id": "na-34",
+    "name": "Baraonda",
+    "brand": "Nasomatto",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Woody",
+    "keyNotes": "Whiskey, Woods, Ambrette, Rose",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening, Upscale",
+    "longevity": "Eternal",
+    "sillage": "Strong",
+    "year": 2016,
+    "perfumer": "Alessandro Gualtieri",
+    "originalPrice": 999,
+    "pros": [
+        "Ultra-realistic whiskey note"
+    ],
+    "cons": [
+        "Very small bottle size"
+    ],
+    "comment": "Smells exactly like spilling an expensive glass of whiskey in a wooden barrel.",
+    "profession": "Connoisseur",
+    "persona": "Rugged, Sophisticated",
+    "isTopPick": false
+},
+    {
+    "id": "na-35",
+    "name": "Megamare",
+    "brand": "Orto Parisi",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Aromatic Aquatic",
+    "keyNotes": "Seaweed, Water Notes, Musk",
+    "whenToWear": "Summer/All Year",
+    "bestOccasion": "Outdoor Statement",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2019,
+    "perfumer": "Alessandro Gualtieri",
+    "originalPrice": 750,
+    "pros": [
+        "Nuclear longevity and projection"
+    ],
+    "cons": [
+        "Highly polarizing"
+    ],
+    "comment": "A challenging, deep, and mysterious dark marine scent.",
+    "profession": "Marine Biologist",
+    "persona": "Edgy, Mysterious",
+    "isTopPick": false
+},
+    {
+    "id": "na-36",
+    "name": "Tonka Cola",
+    "brand": "Mancera",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Spicy",
+    "keyNotes": "Cherry, Cola, Cinnamon, Tonka",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Night Out, Casual",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2022,
+    "perfumer": "Pierre Montale",
+    "originalPrice": 550,
+    "pros": [
+        "Highly unique, fizzy cola note"
+    ],
+    "cons": [
+        "Can be overly sweet"
+    ],
+    "comment": "A fun, gourmand twist that smells exactly like cherry cola.",
+    "profession": "Entertainer",
+    "persona": "Fun, Quirky",
+    "isTopPick": false
+},
+    {
+    "id": "na-37",
+    "name": "Fig Infusion",
+    "brand": "Essential Parfums",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Woody Fruity",
+    "keyNotes": "Fig, Black Tea, Sandalwood",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Relaxing, Casual",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2022,
+    "perfumer": "Nathalie Lorson",
+    "originalPrice": 350,
+    "pros": [
+        "Affordable niche; very comforting"
+    ],
+    "cons": [
+        "Average performance"
+    ],
+    "comment": "A calming, creamy, and green fig experience.",
+    "profession": "Writer",
+    "persona": "Calm, Intellectual",
+    "isTopPick": false
+},
+    {
+    "id": "na-38",
+    "name": "Allure Homme Sport Superleggera",
+    "brand": "Chanel",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Woody Aromatic",
+    "keyNotes": "Citrus, Woody Notes, Musk",
+    "whenToWear": "Spring/Summer",
+    "bestOccasion": "Gym, Casual, Office",
+    "longevity": "Moderate",
+    "sillage": "Moderate",
+    "year": 2024,
+    "perfumer": "O. Polge, J. Polge",
+    "originalPrice": 650,
+    "pros": [
+        "Lighter, crisper take on the original"
+    ],
+    "cons": [
+        "Performs like a lighter cologne"
+    ],
+    "comment": "A modernized, highly refreshing update to a classic sports DNA.",
+    "profession": "Athlete",
+    "persona": "Active, Fresh",
+    "isTopPick": false
+},
+    {
+    "id": "na-39",
+    "name": "Gucci Guilty Absolute",
+    "brand": "Gucci",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Amber Woody",
+    "keyNotes": "Leather, Cypress, Patchouli, Vetiver",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening, Formal",
+    "longevity": "Long-lasting",
+    "sillage": "Strong",
+    "year": 2017,
+    "perfumer": "Alberto Morillas",
+    "originalPrice": 500,
+    "pros": [
+        "Extremely daring, medicinal, and niche-like"
+    ],
+    "cons": [
+        "Highly polarizing; smells like Band-Aids to some"
+    ],
+    "comment": "One of the most daring and uncompromising designer releases ever.",
+    "profession": "Mechanic / Biker",
+    "persona": "Masculine, Unapologetic",
+    "isTopPick": false
+},
+    {
+    "id": "na-40",
+    "name": "Stronger With You Intensely",
+    "brand": "Emporio Armani",
+    "category": "New Arrivals",
+    "gender": "Male",
+    "olfactoryFamily": "Amber Fougere",
+    "keyNotes": "Pink Pepper, Toffee, Cinnamon, Vanilla",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Dates, Casual",
+    "longevity": "Eternal",
+    "sillage": "Enormous",
+    "year": 2019,
+    "perfumer": "Cecile Matton",
+    "originalPrice": 450,
+    "pros": [
+        "Cozy, sweet, and highly compliment-getting"
+    ],
+    "cons": [
+        "Very sweet and youthful"
+    ],
+    "comment": "A cozy, toffee-heavy winter staple that performs incredibly well.",
+    "profession": "Student",
+    "persona": "Sweet, Charming",
+    "isTopPick": false
+},
+    {
+    "id": "na-41",
+    "name": "Red Wine Brown Sugar",
+    "brand": "Bohoboco",
+    "category": "New Arrivals",
+    "gender": "Unisex",
+    "olfactoryFamily": "Amber Vanilla",
+    "keyNotes": "Red Wine, Brown Sugar, Patchouli",
+    "whenToWear": "Fall/Winter",
+    "bestOccasion": "Evening, Cozy",
+    "longevity": "Long-lasting",
+    "sillage": "Moderate",
+    "year": 2016,
+    "perfumer": "Michal Gilbert Lach",
+    "originalPrice": 600,
+    "pros": [
+        "Photorealistic sweet wine scent"
+    ],
+    "cons": [
+        "Very specific scent profile"
+    ],
+    "comment": "A truly unique gourmand that smells exactly like a glass of sweetened red wine.",
+    "profession": "Sommelier",
+    "persona": "Eccentric, Warm",
+    "isTopPick": false
+}];
 
   private calculateImpressionPrice(originalPrice: number): number {
     if (originalPrice > 1500) return 99;

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
   selector: 'app-shop',
   standalone: true,
   imports: [FormsModule, ProductCardComponent, MatIconModule, QuoteCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen bg-gray-50 py-12">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +27,7 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
           
           <!-- Mobile Filter Overlay -->
           @if (isMobileFilterOpen()) {
-            <div class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity" (click)="isMobileFilterOpen.set(false)"></div>
+            <div class="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity" (click)="isMobileFilterOpen.set(false)" (keydown.escape)="isMobileFilterOpen.set(false)" tabindex="-1"></div>
           }
 
           <!-- Sidebar Filters -->

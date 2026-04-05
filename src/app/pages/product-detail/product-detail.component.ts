@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
+import { NgOptimizedImage } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { Product } from '../../models/product.model';
@@ -11,7 +12,8 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [RouterLink, MatIconModule, ProductCardComponent, QuoteCardComponent],
+  imports: [RouterLink, MatIconModule, ProductCardComponent, QuoteCardComponent, NgOptimizedImage],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen bg-white py-12">
       @if (product()) {
@@ -34,7 +36,10 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
                 <div class="absolute inset-0 bg-gradient-to-br from-transparent to-gray-100/50"></div>
                 <div class="text-center relative z-10">
                   <!-- Background Watermark Image -->
-                  <img src="https://ais-pre-t7gjcw6mcpay6ihwkb46i4-306586258974.europe-west2.run.app/api/attachments/1LkvJAAUDEmd09bRMB7nSKnOsxHsRaRNH" 
+                  <img ngSrc="https://ais-pre-t7gjcw6mcpay6ihwkb46i4-306586258974.europe-west2.run.app/api/attachments/1LkvJAAUDEmd09bRMB7nSKnOsxHsRaRNH" 
+                       width="800"
+                       height="800"
+                       priority
                        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] max-w-none h-[150%] object-contain opacity-[0.08] -z-10 pointer-events-none"
                        referrerpolicy="no-referrer"
                        [alt]="product()?.name + ' Impression by XPerfumes'">
@@ -160,8 +165,22 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
                     </div>
                     <div class="flex-1">
                       <p class="text-gray-700 leading-relaxed text-lg mb-6">
-                        This fragrance is perfectly suited for the <strong class="text-gray-900 font-serif">{{ product()?.profession }}</strong>. 
-                        It embodies a <strong class="text-gray-900 font-serif">{{ product()?.persona }}</strong> vibe, making it the ideal choice to complement your unique character and leave a memorable impression.
+                        This fragrance is perfectly suited for the 
+                        <span class="group relative inline-block cursor-help">
+                          <strong class="text-gray-900 font-serif border-b border-dashed border-gray-400">{{ product()?.profession }}</strong>
+                          <span class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 opacity-0 transition-opacity group-hover:opacity-100 bg-gray-900 text-white text-xs rounded py-1.5 px-2 text-center z-20">
+                            The profession highlights the ideal setting or career path where this fragrance shines.
+                            <svg class="absolute text-gray-900 h-2 w-full left-0 top-full" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve"><polygon class="fill-current" points="0,0 127.5,127.5 255,0"/></svg>
+                          </span>
+                        </span>. 
+                        It embodies a 
+                        <span class="group relative inline-block cursor-help">
+                          <strong class="text-gray-900 font-serif border-b border-dashed border-gray-400">{{ product()?.persona }}</strong>
+                          <span class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 opacity-0 transition-opacity group-hover:opacity-100 bg-gray-900 text-white text-xs rounded py-1.5 px-2 text-center z-20">
+                            The persona describes the character and mood this scent projects to others.
+                            <svg class="absolute text-gray-900 h-2 w-full left-0 top-full" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve"><polygon class="fill-current" points="0,0 127.5,127.5 255,0"/></svg>
+                          </span>
+                        </span> vibe, making it the ideal choice to complement your unique character and leave a memorable impression.
                       </p>
                       
                       <!-- Key Accords Subsection -->
@@ -170,14 +189,36 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
                           <mat-icon style="font-size: 16px; width: 16px; height: 16px;">bubble_chart</mat-icon>
                           Key Accords
                         </h4>
-                        <div class="flex flex-wrap gap-2.5">
-                          @for (accord of keyAccords(); track accord) {
-                            <span class="group relative inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium bg-white border border-gray-200 text-gray-700 shadow-sm hover:shadow-md hover:border-gold-300 hover:text-gold-700 transition-all duration-300 cursor-default hover:-translate-y-0.5 overflow-hidden">
-                              <span class="absolute inset-0 bg-gradient-to-r from-gold-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                              <span class="relative z-10">{{ accord }}</span>
-                            </span>
+                        <div class="flex flex-wrap gap-3">
+                          @for (accord of keyAccords(); track accord; let i = $index) {
+                            <div class="group relative inline-block">
+                              <span (click)="openAccordModal(accord)" 
+                                    (keydown.enter)="openAccordModal(accord)"
+                                    tabindex="0"
+                                    [style.fontSize.px]="12 + (i % 3) * 2"
+                                    class="inline-flex items-center px-4 py-2 rounded-xl font-medium bg-white border border-gray-100 text-gray-700 shadow-sm hover:shadow-xl hover:border-gold-300 hover:text-gold-700 transition-all duration-500 cursor-pointer hover:-translate-y-1 overflow-hidden focus:outline-none focus:ring-2 focus:ring-gold-400">
+                                <span class="absolute inset-0 bg-gradient-to-br from-gold-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                                <span class="relative z-10">{{ accord }}</span>
+                              </span>
+                              <!-- Accord Tooltip -->
+                              <div class="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-40 opacity-0 transition-opacity group-hover:opacity-100 bg-gray-900 text-white text-[10px] rounded py-1.5 px-2 text-center z-30 shadow-xl">
+                                {{ accordDescriptions[accord] || 'A unique scent profile.' }}
+                                <svg class="absolute text-gray-900 h-2 w-full left-0 top-full" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve"><polygon class="fill-current" points="0,0 127.5,127.5 255,0"/></svg>
+                              </div>
+                            </div>
                           }
                         </div>
+                      </div>
+
+                      <!-- Fragrance Notes Subsection -->
+                      <div class="pt-6 mt-6 border-t border-gray-200/60">
+                        <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500 mb-3 flex items-center gap-2">
+                          <mat-icon style="font-size: 16px; width: 16px; height: 16px;">auto_awesome_motion</mat-icon>
+                          Fragrance Notes
+                        </h4>
+                        <p class="text-gray-800 font-serif italic text-lg leading-relaxed">
+                          {{ product()?.keyNotes }}
+                        </p>
                       </div>
 
                       <!-- Perfumer Subsection -->
@@ -331,6 +372,36 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
           </div>
         </div>
       }
+
+      <!-- Accord Modal -->
+      @if (selectedAccord()) {
+        <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+          <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" (click)="closeAccordModal()" (keydown.escape)="closeAccordModal()" tabindex="-1"></div>
+          <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div class="p-6 sm:p-8">
+              <div class="flex justify-between items-start mb-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-gold-50 flex items-center justify-center text-gold-600">
+                    <mat-icon>bubble_chart</mat-icon>
+                  </div>
+                  <h3 class="text-2xl font-serif font-bold text-gray-900">{{ selectedAccord()?.name }}</h3>
+                </div>
+                <button (click)="closeAccordModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <p class="text-gray-600 leading-relaxed text-lg">
+                {{ selectedAccord()?.description }}
+              </p>
+            </div>
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end">
+              <button (click)="closeAccordModal()" class="px-6 py-2 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-colors">
+                Got it
+              </button>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `
 })
@@ -379,6 +450,37 @@ export class ProductDetailComponent implements OnInit {
   });
 
   isAddedToCart = signal(false);
+  selectedAccord = signal<{name: string, description: string} | null>(null);
+
+  accordDescriptions: Record<string, string> = {
+    'Citrus': 'Bright, zesty, and refreshing notes typically derived from lemon, bergamot, orange, and grapefruit.',
+    'Woody': 'Warm, earthy, and grounding notes like sandalwood, cedar, patchouli, and vetiver.',
+    'Floral': 'Romantic and soft notes derived from flowers like rose, jasmine, lily, and ylang-ylang.',
+    'Amber': 'Rich, warm, and sweet notes often featuring vanilla, resin, and labdanum.',
+    'Spicy': 'Warm or fresh pungent notes like cinnamon, cardamom, pepper, and clove.',
+    'Aquatic': 'Fresh, marine, and watery notes reminiscent of the ocean or sea breeze.',
+    'Fruity': 'Sweet, tart, and juicy notes from fruits like apple, berry, peach, and melon.',
+    'Gourmand': 'Edible, dessert-like notes such as chocolate, caramel, coffee, and vanilla.',
+    'Aromatic': 'Herbal and green notes like lavender, rosemary, sage, and mint.',
+    'Chypre': 'A complex accord contrasting fresh citrus top notes with a mossy, woody base.',
+    'Fougere': 'A fern-like scent combining lavender, oakmoss, and coumarin for a fresh, barbershop feel.',
+    'Leather': 'Smoky, dry, and deep notes reminiscent of cured leather and tobacco.',
+    'Musk': 'Clean, skin-like, or animalic notes that add depth and longevity to a fragrance.',
+    'Earthy': 'Dark, rich notes reminiscent of damp soil, roots, and forest floors.',
+    'Green': 'Crisp, fresh notes smelling of crushed leaves, grass, and stems.',
+    'Fresh': 'Clean, uplifting, and airy notes that give a sense of vitality.',
+    'Sweet': 'Sugary, rich, and comforting notes often derived from vanilla, honey, or fruits.',
+    'Powdery': 'Soft, dry, and comforting notes reminiscent of talcum powder or makeup, often from iris or violet.'
+  };
+
+  openAccordModal(accordName: string) {
+    const description = this.accordDescriptions[accordName] || "A distinct note or accord that contributes to the unique character and depth of the fragrance.";
+    this.selectedAccord.set({ name: accordName, description });
+  }
+
+  closeAccordModal() {
+    this.selectedAccord.set(null);
+  }
 
   keyAccords = computed(() => {
     const prod = this.product();
