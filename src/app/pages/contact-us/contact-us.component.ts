@@ -175,22 +175,16 @@ export class ContactUsComponent {
       this.isSubmitting.set(true);
       
       const formValues = this.contactForm.value;
-      const formBody = new URLSearchParams();
-      formBody.append('entry.1789131805', formValues.name || '');
-      formBody.append('entry.12857435', formValues.email || '');
-      formBody.append('entry.652682991', formValues.phone || '');
-      formBody.append('entry.2045204214', formValues.subject || '');
-      formBody.append('entry.1008221946', formValues.message || '');
 
-      const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSex-tZ_DPfD40xo3ilHGKkVSJqmR5bDruDxwtKhUY_5GXT1zw/formResponse';
-
-      fetch(formUrl, {
+      fetch('/api/contact', {
         method: 'POST',
-        mode: 'no-cors',
-        body: formBody,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formValues)
+      }).then(res => {
+        if (!res.ok) throw new Error('Server returned error');
+        return res.json();
       }).then(() => {
         this.isSubmitted.set(true);
         this.isSubmitting.set(false);
@@ -202,7 +196,7 @@ export class ContactUsComponent {
           this.isSubmitted.set(false);
         }, 5000);
       }).catch(err => {
-        console.error('Failed to send contact message to Google Forms:', err);
+        console.error('Failed to send contact message:', err);
         // Still show success to user but log error
         this.isSubmitted.set(true);
         this.isSubmitting.set(false);

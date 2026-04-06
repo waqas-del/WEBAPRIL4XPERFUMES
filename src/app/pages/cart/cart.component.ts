@@ -1,7 +1,9 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, PLATFORM_ID } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { CartService } from '../../services/cart.service';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-cart',
@@ -67,7 +69,7 @@ import { CartService } from '../../services/cart.service';
                   <mat-icon style="font-size: 18px; width: 18px; height: 18px;">chat</mat-icon>
                   Order via WhatsApp
                 </button>
-                <a routerLink="/checkout" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-sm text-white bg-gray-900 hover:bg-gray-800 transition-colors">
+                <a routerLink="/checkout" (click)="trackCheckout()" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-medium rounded-sm text-white bg-gray-900 hover:bg-gray-800 transition-colors">
                   Proceed to Checkout
                 </a>
               </div>
@@ -80,10 +82,18 @@ import { CartService } from '../../services/cart.service';
 })
 export class CartComponent {
   cartService = inject(CartService);
+  private analytics = inject(AnalyticsService);
+  private platformId = inject(PLATFORM_ID);
+
+  trackCheckout() {
+    this.analytics.trackInitiateCheckout(this.cartService.cartTotal(), this.cartService.cartItems());
+  }
 
   orderViaWhatsApp() {
     const items = this.cartService.cartItems();
     if (items.length === 0) return;
+
+    this.analytics.trackPurchase(this.cartService.cartTotal(), items);
 
     let message = `Hi, I would like to place an order:\n\n`;
     
@@ -94,6 +104,8 @@ export class CartComponent {
     message += `\nTotal: ${this.cartService.cartTotal()} AED\n\nPlease let me know the next steps.`;
     
     const encodedMessage = encodeURIComponent(message);
-    window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
+    if (isPlatformBrowser(this.platformId)) {
+      window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
+    }
   }
 }

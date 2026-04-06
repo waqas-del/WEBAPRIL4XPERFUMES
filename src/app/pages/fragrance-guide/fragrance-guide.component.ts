@@ -130,17 +130,18 @@ import { MatIconModule } from '@angular/material/icon';
 
         <!-- CTA Section -->
         <div class="text-center bg-gradient-to-br from-gold-50 to-amber-50 rounded-3xl p-10 sm:p-16 border border-gold-100">
-          <h2 class="text-3xl font-serif font-bold text-gray-900 mb-4">Still Not Sure?</h2>
+          <h2 class="text-3xl font-serif font-bold text-gray-900 mb-4">Ready to Find Your Scent?</h2>
           <p class="text-gray-600 mb-8 max-w-xl mx-auto">
-            Take our interactive scent quiz. By answering a few simple questions about your lifestyle and preferences, we'll recommend the perfect X Perfume for you.
+            Explore our curated collections of premium fragrance impressions and find the one that speaks to you.
           </p>
           <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="https://app.xperfumes.me" target="_blank" class="bg-gray-900 text-white px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-all hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2">
-              <mat-icon>auto_awesome</mat-icon>
-              Take The Quiz
+            <a routerLink="/best-sellers" class="bg-gray-900 text-white px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider hover:bg-gray-800 transition-all hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2">
+              <mat-icon>star</mat-icon>
+              Best Sellers
             </a>
-            <a routerLink="/shop" class="bg-white text-gray-900 border border-gray-200 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider hover:border-gray-900 transition-all flex items-center justify-center gap-2">
-              Browse Collection
+            <a routerLink="/new-arrivals" class="bg-white text-gray-900 border border-gray-200 px-8 py-4 rounded-full text-sm font-bold uppercase tracking-wider hover:border-gray-900 transition-all flex items-center justify-center gap-2">
+              <mat-icon>new_releases</mat-icon>
+              New Arrivals
             </a>
           </div>
         </div>

@@ -7,6 +7,7 @@ import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { QuoteCardComponent } from '../../components/quote-card/quote-card.component';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-shop',
@@ -282,6 +283,7 @@ export class ShopComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private titleService = inject(Title);
   private metaService = inject(Meta);
+  private analytics = inject(AnalyticsService);
 
   allProducts = signal<Product[]>([]);
   filteredProducts = signal<Product[]>([]);
@@ -289,6 +291,7 @@ export class ShopComponent implements OnInit {
   isMobileFilterOpen = signal(false);
 
   searchQuery = '';
+  private searchTrackTimeout: ReturnType<typeof setTimeout> | undefined;
   selectedSort = 'default';
   selectedGender = 'All';
   selectedBrand = 'All';
@@ -409,6 +412,13 @@ export class ShopComponent implements OnInit {
 
     if (this.searchQuery.trim()) {
       const query = this.searchQuery.toLowerCase();
+      
+      // Track search with debounce
+      if (this.searchTrackTimeout) clearTimeout(this.searchTrackTimeout);
+      this.searchTrackTimeout = setTimeout(() => {
+        this.analytics.trackSearch(this.searchQuery);
+      }, 1500);
+
       result = result.filter(p => 
         p.name.toLowerCase().includes(query) || 
         p.brand.toLowerCase().includes(query) ||

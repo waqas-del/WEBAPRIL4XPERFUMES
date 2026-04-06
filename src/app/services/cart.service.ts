@@ -1,12 +1,14 @@
 import { Injectable, signal, computed, effect, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CartItem, Product } from '../models/product.model';
+import { AnalyticsService } from './analytics.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
   private platformId = inject(PLATFORM_ID);
+  private analytics = inject(AnalyticsService);
 
   cartItems = signal<CartItem[]>([]);
   compareList = signal<Product[]>([]);
@@ -85,6 +87,7 @@ export class CartService {
   }
 
   addToCart(product: Product, quantity = 1) {
+    this.analytics.trackAddToCart(product, quantity);
     this.cartItems.update(items => {
       const existingItem = items.find(item => item.product.id === product.id);
       if (existingItem) {

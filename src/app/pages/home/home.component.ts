@@ -33,11 +33,11 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
             Discover our curated collection of the world's most exquisite fragrances. Elevate your presence with a signature scent.
           </p>
           <div class="flex justify-center gap-4">
-            <a routerLink="/shop" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-sm text-white bg-gray-900 hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-              Shop Collection
+            <a routerLink="/new-arrivals" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-sm text-white bg-gray-900 hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+              New Arrivals
             </a>
             <a routerLink="/best-sellers" class="inline-flex items-center justify-center px-8 py-4 border border-gray-300 text-base font-medium rounded-sm text-gray-900 bg-white hover:bg-gray-50 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5">
-              Best of 2025
+              Best Seller Page
             </a>
           </div>
         </div>
@@ -61,35 +61,35 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
             <div class="w-16 h-0.5 bg-gold-400 mx-auto mt-4"></div>
           </div>
           
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
             <!-- Male -->
-            <a routerLink="/shop" [queryParams]="{ gender: 'Male' }" class="group relative h-80 bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-center rounded-lg">
+            <a routerLink="/shop" [queryParams]="{ gender: 'Male' }" class="group relative h-24 md:h-80 bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-center rounded-lg">
               <div class="absolute inset-0 bg-gray-50 group-hover:bg-gray-100 transition-colors duration-500 z-0"></div>
               <div class="relative z-20 text-center transform transition-transform duration-500">
-                <h3 class="text-2xl font-serif text-gray-900 mb-2 group-hover:text-gold-600 transition-colors duration-300">Pour Homme</h3>
-                <span class="text-gray-500 group-hover:text-gold-500 text-sm tracking-widest uppercase flex items-center justify-center gap-1 transition-colors duration-300">
+                <h3 class="text-lg md:text-2xl font-serif text-gray-900 mb-0 md:mb-2 group-hover:text-gold-600 transition-colors duration-300">Pour Homme</h3>
+                <span class="hidden md:flex text-gray-500 group-hover:text-gold-500 text-sm tracking-widest uppercase items-center justify-center gap-1 transition-colors duration-300">
                   Explore <mat-icon class="transform group-hover:translate-x-1 transition-transform duration-300" style="font-size: 14px; width: 14px; height: 14px;">arrow_forward</mat-icon>
                 </span>
               </div>
             </a>
             
             <!-- Female -->
-            <a routerLink="/shop" [queryParams]="{ gender: 'Female' }" class="group relative h-80 bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-center rounded-lg">
+            <a routerLink="/shop" [queryParams]="{ gender: 'Female' }" class="group relative h-24 md:h-80 bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-center rounded-lg">
               <div class="absolute inset-0 bg-gray-50 group-hover:bg-gray-100 transition-colors duration-500 z-0"></div>
               <div class="relative z-20 text-center transform transition-transform duration-500">
-                <h3 class="text-2xl font-serif text-gray-900 mb-2 group-hover:text-gold-600 transition-colors duration-300">Pour Femme</h3>
-                <span class="text-gray-500 group-hover:text-gold-500 text-sm tracking-widest uppercase flex items-center justify-center gap-1 transition-colors duration-300">
+                <h3 class="text-lg md:text-2xl font-serif text-gray-900 mb-0 md:mb-2 group-hover:text-gold-600 transition-colors duration-300">Pour Femme</h3>
+                <span class="hidden md:flex text-gray-500 group-hover:text-gold-500 text-sm tracking-widest uppercase items-center justify-center gap-1 transition-colors duration-300">
                   Explore <mat-icon class="transform group-hover:translate-x-1 transition-transform duration-300" style="font-size: 14px; width: 14px; height: 14px;">arrow_forward</mat-icon>
                 </span>
               </div>
             </a>
             
             <!-- Unisex -->
-            <a routerLink="/shop" [queryParams]="{ gender: 'Unisex' }" class="group relative h-80 bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-center rounded-lg">
+            <a routerLink="/shop" [queryParams]="{ gender: 'Unisex' }" class="col-span-2 md:col-span-1 group relative h-24 md:h-80 bg-white border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden flex items-center justify-center rounded-lg">
               <div class="absolute inset-0 bg-gray-50 group-hover:bg-gray-100 transition-colors duration-500 z-0"></div>
               <div class="relative z-20 text-center transform transition-transform duration-500">
-                <h3 class="text-2xl font-serif text-gray-900 mb-2 group-hover:text-gold-600 transition-colors duration-300">Unisex</h3>
-                <span class="text-gray-500 group-hover:text-gold-500 text-sm tracking-widest uppercase flex items-center justify-center gap-1 transition-colors duration-300">
+                <h3 class="text-lg md:text-2xl font-serif text-gray-900 mb-0 md:mb-2 group-hover:text-gold-600 transition-colors duration-300">Unisex</h3>
+                <span class="hidden md:flex text-gray-500 group-hover:text-gold-500 text-sm tracking-widest uppercase items-center justify-center gap-1 transition-colors duration-300">
                   Explore <mat-icon class="transform group-hover:translate-x-1 transition-transform duration-300" style="font-size: 14px; width: 14px; height: 14px;">arrow_forward</mat-icon>
                 </span>
               </div>

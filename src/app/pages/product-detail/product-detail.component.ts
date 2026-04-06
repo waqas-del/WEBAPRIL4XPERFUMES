@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NgOptimizedImage } from '@angular/common';
 import { ProductService } from '../../services/product.service';
@@ -8,6 +9,7 @@ import { CartService } from '../../services/cart.service';
 import { Product } from '../../models/product.model';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { QuoteCardComponent } from '../../components/quote-card/quote-card.component';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -31,7 +33,7 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
             
             <!-- Left Column: Typography/Artistic Representation instead of Image -->
-            <div class="lg:col-span-5 relative">
+            <div class="hidden lg:block lg:col-span-5 relative">
               <div class="sticky top-28 bg-gray-50 aspect-[4/5] flex items-center justify-center p-8 border border-gray-100">
                 <div class="absolute inset-0 bg-gradient-to-br from-transparent to-gray-100/50"></div>
                 <div class="text-center relative z-10">
@@ -350,6 +352,50 @@ import { QuoteCardComponent } from '../../components/quote-card/quote-card.compo
                 </div>
               }
 
+              <!-- TikTok Reviews Section (Specific to Imagination) -->
+              @if (product()?.slug === 'louis-vuitton-imagination-impression-by-xperfumes') {
+                <div class="border-t border-gray-200 pt-12 pb-12">
+                  <h3 class="text-2xl font-serif font-bold text-gray-900 mb-8 text-center">Community Reviews</h3>
+                  <div class="relative max-w-lg mx-auto px-4 sm:px-0">
+                    <div class="overflow-hidden rounded-2xl shadow-lg bg-white border border-gray-100">
+                      <div class="flex transition-transform duration-500 ease-in-out" [style.transform]="'translateX(-' + (currentVideoIndex() * 100) + '%)'">
+                        @for (video of tiktokVideos; track video.id) {
+                          <div class="w-full flex-shrink-0 p-4 flex justify-center">
+                            <blockquote class="tiktok-embed" [attr.cite]="video.cite" [attr.data-video-id]="video.id" style="max-width: 605px;min-width: 325px;">
+                              <section>
+                                <a target="_blank" [title]="video.author" [href]="video.authorLink">{{ video.author }}</a>
+                                <p>{{ video.text }}</p>
+                                <a target="_blank" [title]="video.music" [href]="video.musicLink">{{ video.music }}</a>
+                              </section>
+                            </blockquote>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                    
+                    <!-- Carousel Controls -->
+                    <button (click)="prevVideo()" class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-gray-400 hover:text-gold-600 transition-all z-10">
+                      <mat-icon>chevron_left</mat-icon>
+                    </button>
+                    <button (click)="nextVideo()" class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-gray-400 hover:text-gold-600 transition-all z-10">
+                      <mat-icon>chevron_right</mat-icon>
+                    </button>
+                    
+                    <!-- Dots -->
+                    <div class="flex justify-center gap-2 mt-6">
+                      @for (video of tiktokVideos; track video.id; let i = $index) {
+                        <button (click)="currentVideoIndex.set(i)" 
+                                class="w-2 h-2 rounded-full transition-all duration-300"
+                                [class.bg-gold-500]="currentVideoIndex() === i"
+                                [class.w-4]="currentVideoIndex() === i"
+                                [class.bg-gray-300]="currentVideoIndex() !== i">
+                        </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+
               <app-quote-card></app-quote-card>
 
             </div>
@@ -410,6 +456,9 @@ export class ProductDetailComponent implements OnInit {
   private router = inject(Router);
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  private analytics = inject(AnalyticsService);
+
+  private platformId = inject(PLATFORM_ID);
 
   product = signal<Product | undefined>(undefined);
   similarProducts = signal<Product[]>([]);
@@ -451,6 +500,45 @@ export class ProductDetailComponent implements OnInit {
 
   isAddedToCart = signal(false);
   selectedAccord = signal<{name: string, description: string} | null>(null);
+  currentVideoIndex = signal(0);
+
+  tiktokVideos = [
+    {
+      id: '7599683556071378198',
+      cite: 'https://www.tiktok.com/@theperfumeguy77/video/7599683556071378198',
+      author: '@theperfumeguy77',
+      authorLink: 'https://www.tiktok.com/@theperfumeguy77?refer=embed',
+      text: 'LV Imagination - The best summer fragrance all time 🍋🍊 #lv #imagination #fyp #viral #fragrancetok',
+      music: '♬ original sound - St julies',
+      musicLink: 'https://www.tiktok.com/music/original-sound-7581587709534866198?refer=embed'
+    },
+    {
+      id: '7435051232013700395',
+      cite: 'https://www.tiktok.com/@beautywithlandynn/video/7435051232013700395',
+      author: '@beautywithlandynn',
+      authorLink: 'https://www.tiktok.com/@beautywithlandynn?refer=embed',
+      text: 'Its sooooooo addictive!! @Louis Vuitton #perfume #cologne #louisvuitton #fragrancetiktok',
+      music: '♬ original sound - Landyn💋',
+      musicLink: 'https://www.tiktok.com/music/original-sound-7435051221588708142?refer=embed'
+    },
+    {
+      id: '7600698984461618450',
+      cite: 'https://www.tiktok.com/@omarperfume0/video/7600698984461618450',
+      author: '@omarperfume0',
+      authorLink: 'https://www.tiktok.com/@omarperfume0?refer=embed',
+      text: 'imagination by lv if u love this fragrance then watch full video',
+      music: '♬ original sound - vyeon.11',
+      musicLink: 'https://www.tiktok.com/music/original-sound-7591213600086264599?refer=embed'
+    }
+  ];
+
+  nextVideo() {
+    this.currentVideoIndex.update(i => (i + 1) % this.tiktokVideos.length);
+  }
+
+  prevVideo() {
+    this.currentVideoIndex.update(i => (i - 1 + this.tiktokVideos.length) % this.tiktokVideos.length);
+  }
 
   accordDescriptions: Record<string, string> = {
     'Citrus': 'Bright, zesty, and refreshing notes typically derived from lemon, bergamot, orange, and grapefruit.',
@@ -514,6 +602,7 @@ export class ProductDetailComponent implements OnInit {
         if (p) {
           this.product.set(p);
           this.similarProducts.set(this.productService.getSimilarProducts(p, 3));
+          this.analytics.trackViewContent(p);
           
           // Update SEO Title and Meta Tags
           const pageTitle = `${p.name} Impression by XPerfumes | ${p.brand}`;
@@ -528,7 +617,14 @@ export class ProductDetailComponent implements OnInit {
           this.metaService.updateTag({ property: 'og:type', content: 'product' });
           
           // Scroll to top when product changes
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (isPlatformBrowser(this.platformId)) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+
+          // Load TikTok script if this is the Imagination product
+          if (p.slug === 'louis-vuitton-imagination-impression-by-xperfumes') {
+            this.loadTikTokScript();
+          }
         } else {
           this.router.navigate(['/shop']);
         }
@@ -550,9 +646,37 @@ export class ProductDetailComponent implements OnInit {
   orderViaWhatsApp() {
     const p = this.product();
     if (p) {
+      this.analytics.trackContact(p);
       const message = `Hi, I would like to order:\n\n1x ${p.name} by ${p.brand}\nPrice: ${p.impressionPrice} AED\n\nPlease let me know the next steps.`;
       const encodedMessage = encodeURIComponent(message);
-      window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
+      if (isPlatformBrowser(this.platformId)) {
+        window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
+      }
+    }
+  }
+
+  private loadTikTokScript() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (!document.getElementById('tiktok-embed-script')) {
+      const script = document.createElement('script');
+      script.id = 'tiktok-embed-script';
+      script.src = 'https://www.tiktok.com/embed.js';
+      script.async = true;
+      document.body.appendChild(script);
+    } else {
+      // If script already exists, we might need to re-trigger it
+      // Some versions of the script auto-scan, others might need a nudge
+      // Re-appending the script is a common hack for dynamic content
+      const oldScript = document.getElementById('tiktok-embed-script');
+      if (oldScript) {
+        oldScript.remove();
+        const newScript = document.createElement('script');
+        newScript.id = 'tiktok-embed-script';
+        newScript.src = 'https://www.tiktok.com/embed.js';
+        newScript.async = true;
+        document.body.appendChild(newScript);
+      }
     }
   }
 }

@@ -11,26 +11,6 @@ import { CartService } from '../../services/cart.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="group block h-full relative">
-      <!-- Action Buttons (Top Right) -->
-      <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <button (click)="toggleFavorite($event)" 
-                (keydown.enter)="toggleFavorite($event)"
-                aria-label="Add to favorites"
-                [class.text-rose-500]="isFavorite()" [class.bg-rose-50]="isFavorite()"
-                [class.text-gray-400]="!isFavorite()" [class.bg-white]="!isFavorite()"
-                class="w-8 h-8 rounded-full shadow-md flex items-center justify-center transition-all hover:scale-110 active:scale-95 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-rose-400">
-          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
-        </button>
-        <button (click)="toggleCompare($event)" 
-                (keydown.enter)="toggleCompare($event)"
-                aria-label="Add to compare"
-                [class.text-gold-600]="isCompare()" [class.bg-gold-50]="isCompare()"
-                [class.text-gray-400]="!isCompare()" [class.bg-white]="!isCompare()"
-                class="w-8 h-8 rounded-full shadow-md flex items-center justify-center transition-all hover:scale-110 active:scale-95 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-gold-400">
-          <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ isCompare() ? 'compare_arrows' : 'compare_arrows' }}</mat-icon>
-        </button>
-      </div>
-
       <a [routerLink]="['/product', product().slug]" class="block h-full">
         <div class="border p-6 h-full flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] relative overflow-hidden"
              [class]="themeClasses().container">
@@ -39,36 +19,84 @@ import { CartService } from '../../services/cart.service';
           <div class="absolute top-0 left-0 w-full h-1 transform origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
                [class]="themeClasses().accentLine"></div>
 
-          <div class="mb-4 relative z-10">
-            <p class="text-xs uppercase tracking-widest mb-1" [class]="themeClasses().brandText">{{ product().brand }}</p>
-            <h3 class="text-xl font-serif transition-colors" [class]="themeClasses().titleText">{{ product().name }}</h3>
+          <!-- Line 1: Brand -->
+          <p class="text-[10px] uppercase tracking-[0.2em] mb-1 font-bold" [class]="themeClasses().brandText">
+            {{ product().brand }}
+          </p>
+          
+          <!-- Line 2: Name -->
+          <h3 class="text-xl font-serif font-bold mb-2 transition-colors" [class]="themeClasses().titleText">
+            {{ product().name }}
+          </h3>
+          
+          <!-- Line 3: Type -->
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border" [class]="themeClasses().badge">
+              {{ product().gender }}
+            </span>
+            <span class="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border" [class]="themeClasses().badge">
+              {{ product().category }}
+            </span>
           </div>
           
-          <div class="flex-grow relative z-10">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="text-xs px-2 py-1 rounded-sm" [class]="themeClasses().badge">{{ product().gender }}</span>
-              <span class="text-xs px-2 py-1 rounded-sm" [class]="themeClasses().badge">{{ product().category }}</span>
-            </div>
-            
-            <div class="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-300 ease-in-out">
-              <div class="overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
-                <p class="text-sm line-clamp-3 mb-4 mt-1" [class]="themeClasses().notesText">
-                  <span class="font-medium" [class]="themeClasses().notesLabel">Key Notes:</span> {{ product().keyNotes }}
-                </p>
-              </div>
-            </div>
+          <!-- Line 4, 5: Key Notes -->
+          <div class="flex-grow mb-4">
+            <p class="text-xs leading-relaxed line-clamp-2" [class]="themeClasses().notesText">
+              <span class="font-bold uppercase tracking-tighter mr-1" [class]="themeClasses().notesLabel">Notes:</span>
+              {{ product().keyNotes }}
+            </p>
           </div>
+
+          <!-- Divider -->
+          <div class="border-t mb-4" [class]="themeClasses().divider"></div>
           
-          <div class="mt-auto pt-4 border-t flex items-end justify-between relative z-10" [class]="themeClasses().divider">
-            <div>
-              <p class="text-[10px] uppercase tracking-wider mb-0.5" [class]="themeClasses().originalPrice">Original: <span class="line-through">{{ product().originalPrice }} AED</span></p>
-              <p class="text-sm font-medium flex items-baseline gap-1" [class]="themeClasses().impressionPriceContainer">
-                <span class="text-[10px] uppercase tracking-wider mr-1" [class]="themeClasses().impressionLabel">Impression:</span>
-                <span class="text-2xl font-bold" [class]="themeClasses().impressionPrice">{{ product().impressionPrice }} AED</span>
-              </p>
+          <!-- Line 6: Original Price -->
+          <p class="text-[10px] uppercase tracking-widest mb-1" [class]="themeClasses().originalPrice">
+            Original: <span class="line-through">{{ product().originalPrice }} AED</span>
+          </p>
+          
+          <!-- Line 7: Impression Price -->
+          <div class="mb-5">
+            <p class="text-sm font-medium flex items-baseline gap-2" [class]="themeClasses().impressionPriceContainer">
+              <span class="text-[10px] uppercase tracking-wider font-bold" [class]="themeClasses().impressionLabel">Impression:</span>
+              <span class="text-2xl font-black" [class]="themeClasses().impressionPrice">{{ product().impressionPrice }} AED</span>
+            </p>
+          </div>
+
+          <!-- Line 8: Icons -->
+          <div class="flex items-center justify-between relative z-10">
+            <div class="flex items-center gap-3">
+              <!-- Favorite -->
+              <button (click)="toggleFavorite($event)" 
+                      aria-label="Add to favorites"
+                      [class.text-rose-500]="isFavorite()" [class.bg-rose-50]="isFavorite()"
+                      [class.text-gray-400]="!isFavorite()" [class.bg-white]="!isFavorite()"
+                      class="w-9 h-9 rounded-full shadow-sm flex items-center justify-center transition-all hover:scale-110 active:scale-95 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-rose-400">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ isFavorite() ? 'favorite' : 'favorite_border' }}</mat-icon>
+              </button>
+
+              <!-- Compare -->
+              <button (click)="toggleCompare($event)" 
+                      aria-label="Add to compare"
+                      [class.text-gold-600]="isCompare()" [class.bg-gold-50]="isCompare()"
+                      [class.text-gray-400]="!isCompare()" [class.bg-white]="!isCompare()"
+                      class="w-9 h-9 rounded-full shadow-sm flex items-center justify-center transition-all hover:scale-110 active:scale-95 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-gold-400">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px;">compare_arrows</mat-icon>
+              </button>
+
+              <!-- Quick Add to Cart -->
+              <button (click)="addToCart($event)" 
+                      aria-label="Add to cart"
+                      [class.bg-green-600]="isAdding()" [class.text-white]="isAdding()"
+                      [class.bg-white]="!isAdding()" [class.text-green-600]="!isAdding()"
+                      class="w-9 h-9 rounded-full shadow-sm flex items-center justify-center transition-all hover:scale-110 active:scale-95 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400">
+                <mat-icon style="font-size: 18px; width: 18px; height: 18px;">{{ isAdding() ? 'check' : 'shopping_cart' }}</mat-icon>
+              </button>
             </div>
-            <div class="w-8 h-8 rounded-full flex items-center justify-center transition-colors" [class]="themeClasses().arrowBtn">
-              <mat-icon class="text-sm" style="font-size: 16px; width: 16px; height: 16px;">arrow_forward</mat-icon>
+
+            <!-- Detail Arrow -->
+            <div class="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110" [class]="themeClasses().arrowBtn">
+              <mat-icon style="font-size: 18px; width: 18px; height: 18px;">arrow_forward</mat-icon>
             </div>
           </div>
           
@@ -88,6 +116,7 @@ export class ProductCardComponent {
   rank = input<'gold' | 'silver' | 'bronze' | 'default'>('default');
 
   isFavorite = signal(false);
+  isAdding = signal(false);
   isCompare = computed(() => this.cartService.isInCompare(this.product().id));
 
   toggleFavorite(event: Event) {
@@ -100,6 +129,15 @@ export class ProductCardComponent {
     event.preventDefault();
     event.stopPropagation();
     this.cartService.toggleCompare(this.product());
+  }
+
+  addToCart(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.cartService.addToCart(this.product());
+    
+    this.isAdding.set(true);
+    setTimeout(() => this.isAdding.set(false), 1500);
   }
 
   themeClasses = computed(() => {
