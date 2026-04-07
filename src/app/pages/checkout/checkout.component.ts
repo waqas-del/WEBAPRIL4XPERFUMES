@@ -1,9 +1,9 @@
-import { Component, inject, signal, ChangeDetectionStrategy, PLATFORM_ID } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
-import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { CartService } from '../../services/cart.service';
+import { PixelService } from '../../services/pixel.service';
 
 @Component({
   selector: 'app-checkout',
@@ -150,7 +150,7 @@ import { CartService } from '../../services/cart.service';
 export class CheckoutComponent {
   cartService = inject(CartService);
   private router = inject(Router);
-  private platformId = inject(PLATFORM_ID);
+  private pixelService = inject(PixelService);
 
   isSuccess = signal(false);
   isSubmitting = signal(false);
@@ -187,36 +187,49 @@ export class CheckoutComponent {
       return;
     }
     if (this.userAnswer !== (this.mathChallenge.a + this.mathChallenge.b)) {
-      if (isPlatformBrowser(this.platformId)) {
-        alert('Security verification failed. Please try again.');
-      }
+      alert('Security verification failed. Please try again.');
       return;
     }
 
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
     
+    const itemsString = this.cartService.cartItems().map(item => `${item.quantity}x ${item.product.name}`).join('\n');
     const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    fetch('/api/orders', {
+    const formBody = new URLSearchParams();
+    formBody.append('entry.1289515362', this.formData.name || '');
+    formBody.append('entry.841398653', this.formData.email || '');
+    formBody.append('entry.1068202683', this.formData.phone || '');
+    
+    let orderDetails = `Order ID: ${orderId}\n\nItems:\n${itemsString}`;
+    if (this.formData.notes) {
+      orderDetails += `\n\nNotes:\n${this.formData.notes}`;
+    }
+    formBody.append('entry.1927657256', orderDetails);
+    
+    formBody.append('entry.1147881902', this.formData.country || '');
+    formBody.append('entry.1411113354', this.formData.province || '');
+    formBody.append('entry.1980160641', this.formData.address || '');
+    formBody.append('entry.1385289147', this.cartService.cartTotal().toString());
+
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe_5eS5dX5iXRU6JvBvafqradZ5esz9d-5RrbHlUy2TSHWTBA/formResponse';
+
+    fetch(formUrl, {
       method: 'POST',
+      mode: 'no-cors',
+      body: formBody,
       headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        items: this.cartService.cartItems(),
-        details: { ...this.formData, orderId },
-        total: this.cartService.cartTotal()
-      })
-    }).then(res => {
-      if (!res.ok) throw new Error('Server returned error');
-      return res.json();
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     }).then(() => {
+      // With no-cors, we can't read the response status, so we assume success if the fetch completes
+      this.pixelService.trackPurchase(this.cartService.cartTotal(), this.cartService.cartItems());
       this.isSuccess.set(true);
       this.cartService.clearCart();
       this.isSubmitting.set(false);
     }).catch(err => {
-      console.error('Failed to save order:', err);
+      console.error('Failed to save order to Google Forms:', err);
       this.errorMessage.set(`Order Submission Error: Check your internet connection and try again.`);
       this.isSubmitting.set(false);
     });
@@ -229,25 +242,38 @@ export class CheckoutComponent {
     this.isSubmitting.set(true);
     this.errorMessage.set(null);
 
+    const itemsString = this.cartService.cartItems().map(item => `${item.quantity}x ${item.product.name}`).join('\n');
     const orderId = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    fetch('/api/orders', {
+    const formBody = new URLSearchParams();
+    formBody.append('entry.1289515362', this.formData.name || '');
+    formBody.append('entry.841398653', this.formData.email || '');
+    formBody.append('entry.1068202683', this.formData.phone || '');
+    
+    let orderDetails = `Order ID: ${orderId}\n\nItems:\n${itemsString}`;
+    if (this.formData.notes) {
+      orderDetails += `\n\nNotes:\n${this.formData.notes}`;
+    }
+    formBody.append('entry.1927657256', orderDetails);
+    
+    formBody.append('entry.1147881902', this.formData.country || '');
+    formBody.append('entry.1411113354', this.formData.province || '');
+    formBody.append('entry.1980160641', this.formData.address || '');
+    formBody.append('entry.1385289147', this.cartService.cartTotal().toString());
+
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe_5eS5dX5iXRU6JvBvafqradZ5esz9d-5RrbHlUy2TSHWTBA/formResponse';
+
+    fetch(formUrl, {
       method: 'POST',
+      mode: 'no-cors',
+      body: formBody,
       headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        items: this.cartService.cartItems(),
-        details: { ...this.formData, orderId },
-        total: this.cartService.cartTotal()
-      })
-    }).then(res => {
-      if (!res.ok) throw new Error('Server returned error');
-      return res.json();
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
     }).then(() => {
       this.finalizeWhatsAppOrder();
     }).catch(err => {
-      console.error('Failed to save order:', err);
+      console.error('Failed to save order to Google Forms:', err);
       this.errorMessage.set(`Order Submission Error: Check your internet connection and try again.`);
       this.isSubmitting.set(false);
     });
@@ -275,10 +301,9 @@ export class CheckoutComponent {
     message += `Payment: Cash on Delivery`;
     
     const encodedMessage = encodeURIComponent(message);
-    if (isPlatformBrowser(this.platformId)) {
-      window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
-    }
+    window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
     
+    this.pixelService.trackPurchase(this.cartService.cartTotal(), this.cartService.cartItems());
     this.isSuccess.set(true);
     this.cartService.clearCart();
     this.isSubmitting.set(false);

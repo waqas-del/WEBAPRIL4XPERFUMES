@@ -15,42 +15,6 @@ app.use(express.json());
 const angularApp = new AngularNodeAppEngine();
 
 /**
- * Helper to get a valid client IP address
- */
-function getClientIp(req: express.Request): string | undefined {
-  let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-  if (Array.isArray(ip)) {
-    ip = ip[0];
-  }
-  
-  if (typeof ip === 'string') {
-    // x-forwarded-for can be a comma-separated list
-    ip = ip.split(',')[0].trim();
-    
-    // Remove IPv6 prefix for IPv4 addresses
-    if (ip.startsWith('::ffff:')) {
-      ip = ip.substring(7);
-    }
-
-    // Strip port if present (e.g. 1.2.3.4:5678)
-    if (ip.includes(':') && !ip.includes('::')) {
-      ip = ip.split(':')[0];
-    }
-    
-    // If it's localhost or private, return undefined to avoid API rejection
-    const isLocalhost = ip === '::1' || ip === '127.0.0.1' || ip === 'localhost';
-    const isPrivate = /^(10\.|172\.(1[6-9]|2[0-9]|3[0-1])\.|192\.168\.|169\.254\.|fc00:|fe80:)/.test(ip);
-    
-    if (isLocalhost || isPrivate) {
-      return undefined;
-    }
-    
-    return ip;
-  }
-  return undefined;
-}
-
-/**
  * Google Sheets API endpoint for Orders
  */
 app.post('/api/orders', async (req, res) => {
@@ -113,13 +77,19 @@ app.post('/api/contact', async (req, res) => {
     const { name, email, phone, subject, message } = req.body;
     
     const formData = new URLSearchParams();
-    formData.append('entry.1789131805', name || '');
-    formData.append('entry.12857435', email || '');
-    formData.append('entry.652682991', phone || '');
-    formData.append('entry.2045204214', subject || '');
-    formData.append('entry.1008221946', message || '');
+    formData.append('entry.1289515362', name || '');
+    formData.append('entry.841398653', email || '');
+    formData.append('entry.1068202683', phone || '');
+    
+    const details = `CONTACT MESSAGE\n\nSubject: ${subject || 'No Subject'}\n\nMessage:\n${message || ''}`;
+    formData.append('entry.1927657256', details);
+    
+    formData.append('entry.1147881902', '-');
+    formData.append('entry.1411113354', '-');
+    formData.append('entry.1980160641', '-');
+    formData.append('entry.1385289147', '0');
 
-    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSex-tZ_DPfD40xo3ilHGKkVSJqmR5bDruDxwtKhUY_5GXT1zw/formResponse';
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSe_5eS5dX5iXRU6JvBvafqradZ5esz9d-5RrbHlUy2TSHWTBA/formResponse';
     
     const response = await fetch(formUrl, {
       method: 'POST',
@@ -162,7 +132,12 @@ app.post('/api/tiktok/track', async (req, res) => {
     const { event, properties, event_id, url, ttp } = req.body;
     
     // Get client IP and User Agent
-    const ip = getClientIp(req);
+    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '';
+    if (Array.isArray(ip)) {
+      ip = ip[0];
+    } else if (typeof ip === 'string' && ip.includes(',')) {
+      ip = ip.split(',')[0].trim();
+    }
     const userAgent = req.headers['user-agent'];
 
     const payload = {
@@ -175,15 +150,15 @@ app.post('/api/tiktok/track', async (req, res) => {
           url: url || req.headers.referer || '',
         },
         user: {
-          ...(ip ? { ip } : {}),
-          user_agent: String(userAgent || ''),
+          ip: ip,
+          user_agent: userAgent,
           ttp: ttp || undefined
         }
       },
       properties: properties || {}
     };
 
-    const response = await fetch('https://business-api.tiktok.com/open_api/v1.3/event/track/', {
+    const response = await fetch('https://business-api.tiktok.com/open_api/v1.3/pixel/track/', {
       method: 'POST',
       headers: {
         'Access-Token': accessToken,
@@ -194,72 +169,14 @@ app.post('/api/tiktok/track', async (req, res) => {
 
     const result = await response.json();
     
-    if (!response.ok) {
+    if (!response.ok || result.code !== 0) {
       console.error('TikTok API Error:', result);
-      return res.status(response.status).json(result);
+      return res.status(response.ok ? 400 : response.status).json(result);
     }
 
     return res.status(200).json(result);
   } catch (error) {
     console.error('Error proxying to TikTok:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-/**
- * Meta (Facebook) Conversion API Proxy
- */
-app.post('/api/fb/track', async (req, res) => {
-  const accessToken = process.env['FB_ACCESS_TOKEN'];
-  const pixelId = process.env['FB_PIXEL_ID'];
-
-  if (!accessToken || !pixelId) {
-    return res.status(500).json({ error: 'Meta configuration missing' });
-  }
-
-  try {
-    const { event_name, event_time, event_id, event_source_url, user_data, custom_data } = req.body;
-    
-    // Get client IP and User Agent
-    const ip = getClientIp(req);
-    const userAgent = req.headers['user-agent'];
-
-    const payload = {
-      data: [
-        {
-          event_name,
-          event_time: event_time || Math.floor(Date.now() / 1000),
-          event_id,
-          event_source_url: event_source_url || req.headers.referer || '',
-          action_source: 'website',
-          user_data: {
-            ...(ip ? { client_ip_address: ip } : {}),
-            client_user_agent: String(userAgent || ''),
-            ...user_data
-          },
-          custom_data: custom_data || {}
-        }
-      ]
-    };
-
-    const response = await fetch(`https://graph.facebook.com/v17.0/${pixelId}/events?access_token=${accessToken}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const result = await response.json();
-    
-    if (!response.ok) {
-      console.error('Meta API Error:', result);
-      return res.status(response.status).json(result);
-    }
-
-    return res.status(200).json(result);
-  } catch (error) {
-    console.error('Error proxying to Meta:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -292,7 +209,7 @@ app.use((req, res, next) => {
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
-  const port = process.env['PORT'] || 3000;
+  const port = process.env['PORT'] || 4000;
   app.listen(port, (error) => {
     if (error) {
       throw error;

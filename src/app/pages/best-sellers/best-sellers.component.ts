@@ -17,8 +17,8 @@ import { ProductCardComponent } from '../../components/product-card/product-card
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center mb-12">
-          <p class="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase mb-4">2025 Best Picks</p>
-          <h1 class="text-4xl md:text-5xl font-serif text-gray-900 mb-12">The Full Collection</h1>
+          <p class="text-xs font-bold tracking-[0.2em] text-gray-400 uppercase mb-4">Best Perfume Impressions</p>
+          <h1 class="text-4xl md:text-5xl font-serif text-gray-900 mb-12">Best Seller</h1>
           
           <!-- Filters Row -->
           <div class="flex flex-wrap items-center justify-center gap-2 md:gap-4 mb-8">
@@ -85,6 +85,41 @@ import { ProductCardComponent } from '../../components/product-card/product-card
           }
         }
       </div>
+
+      <!-- Features Section -->
+      <section class="py-16 bg-gray-50 border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <!-- Free Delivery -->
+            <div class="flex flex-col items-center">
+              <mat-icon class="text-gray-800 mb-4" style="font-size: 36px; width: 36px; height: 36px;">local_shipping</mat-icon>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">Free Delivery UAE</h3>
+              <p class="text-gray-500 text-sm">Fast and free delivery across all Emirates.</p>
+            </div>
+            
+            <!-- COD Available -->
+            <div class="flex flex-col items-center">
+              <mat-icon class="text-gray-800 mb-4" style="font-size: 36px; width: 36px; height: 36px;">verified_user</mat-icon>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">COD Available</h3>
+              <p class="text-gray-500 text-sm">Pay safely with Cash on Delivery.</p>
+            </div>
+            
+            <!-- Long-Lasting -->
+            <div class="flex flex-col items-center">
+              <mat-icon class="text-gray-800 mb-4" style="font-size: 36px; width: 36px; height: 36px;">schedule</mat-icon>
+              <h3 class="text-lg font-medium text-gray-900 mb-2">Long-Lasting</h3>
+              <p class="text-gray-500 text-sm">Premium oil blends made for UAE climate.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Luxury Banner -->
+      <div class="bg-black py-4 text-center">
+        <p class="text-white font-bold tracking-widest flex items-center justify-center gap-2 text-sm md:text-base">
+          <span>💎</span> LUXURY STARTING AED 60
+        </p>
+      </div>
     </div>
   `
 })
@@ -129,8 +164,8 @@ export class BestSellersComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.titleService.setTitle('2025 Best Picks | XPerfumes');
-    this.metaService.updateTag({ name: 'description', content: 'Discover our 2025 Best Picks. The full collection of top-rated luxury impression fragrances.' });
+    this.titleService.setTitle('Best Perfume Impressions | XPerfumes');
+    this.metaService.updateTag({ name: 'description', content: 'Discover our Best Perfume Impressions. The full collection of top-rated luxury impression fragrances.' });
     
     // Simulate network request for loading skeleton
     setTimeout(() => {

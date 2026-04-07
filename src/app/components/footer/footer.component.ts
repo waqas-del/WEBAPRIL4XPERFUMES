@@ -27,7 +27,6 @@ import { MatIconModule } from '@angular/material/icon';
               <li><a routerLink="/shop" class="hover:text-gold-400 transition-colors">Shop All</a></li>
               <li><a routerLink="/shop" [queryParams]="{ category: womensChoiceCategory }" class="hover:text-gold-400 transition-colors">Best Sellers</a></li>
               <li><a routerLink="/guide" class="hover:text-gold-400 transition-colors">Scent Guide</a></li>
-              <li><a href="https://app.xperfumes.me" target="_blank" class="hover:text-gold-400 transition-colors">Perfume Quiz</a></li>
               <li><a routerLink="/about-us" class="hover:text-gold-400 transition-colors">About Us</a></li>
               <li><a routerLink="/contact-us" class="hover:text-gold-400 transition-colors">Contact Us</a></li>
             </ul>

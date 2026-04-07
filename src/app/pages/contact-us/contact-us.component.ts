@@ -1,5 +1,6 @@
-import { Component, inject, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, PLATFORM_ID } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -142,6 +143,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ContactUsComponent {
   private fb = inject(FormBuilder);
+  private platformId = inject(PLATFORM_ID);
   
   mathChallenge = {
     a: Math.floor(Math.random() * 10) + 1,
@@ -175,15 +177,22 @@ export class ContactUsComponent {
       this.isSubmitting.set(true);
       
       const formValues = this.contactForm.value;
+      const baseUrl = isPlatformBrowser(this.platformId) ? window.location.origin : '';
 
-      fetch('/api/contact', {
+      fetch(`${baseUrl}/server-api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formValues)
       }).then(res => {
-        if (!res.ok) throw new Error('Server returned error');
+        if (!res.ok) {
+          return res.json().then(data => {
+            throw new Error(data.details || data.error || 'Server returned error');
+          }).catch(() => {
+            throw new Error(`Server returned status ${res.status}`);
+          });
+        }
         return res.json();
       }).then(() => {
         this.isSubmitted.set(true);
@@ -197,11 +206,12 @@ export class ContactUsComponent {
         }, 5000);
       }).catch(err => {
         console.error('Failed to send contact message:', err);
-        // Still show success to user but log error
-        this.isSubmitted.set(true);
+        // Still show success to user but log error for debugging
+        // This is a design choice to not discourage users if the message might have gone through
+        // but we should probably show an error if it definitely failed.
+        // Given the user's request to fix submission errors, I'll show an error message instead.
         this.isSubmitting.set(false);
-        this.contactForm.reset();
-        this.generateNewChallenge();
+        alert(`Message Submission Error: ${err.message || 'Check your internet connection and try again.'}`);
       });
     }
   }

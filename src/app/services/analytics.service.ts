@@ -21,7 +21,7 @@ export class AnalyticsService {
   }
 
   private sendToServer(event: string, properties: Record<string, unknown> = {}, eventId: string) {
-    this.http.post('/api/tiktok/track', {
+    this.http.post('/server-api/tiktok/track', {
       event,
       properties,
       event_id: eventId,
@@ -33,7 +33,7 @@ export class AnalyticsService {
   }
 
   private sendToFbServer(event_name: string, event_id: string, custom_data: Record<string, unknown> = {}, user_data: Record<string, unknown> = {}) {
-    this.http.post('/api/fb/track', {
+    this.http.post('/server-api/fb/track', {
       event_name,
       event_id,
       event_time: Math.floor(Date.now() / 1000),

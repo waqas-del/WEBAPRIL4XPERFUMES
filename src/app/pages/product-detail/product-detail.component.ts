@@ -1,20 +1,20 @@
-import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy, PLATFORM_ID } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
-import { isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
+import { PixelService } from '../../services/pixel.service';
 import { Product } from '../../models/product.model';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { QuoteCardComponent } from '../../components/quote-card/quote-card.component';
-import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-product-detail',
   standalone: true,
-  imports: [RouterLink, MatIconModule, ProductCardComponent, QuoteCardComponent, NgOptimizedImage],
+  imports: [RouterLink, MatIconModule, ProductCardComponent, QuoteCardComponent, NgOptimizedImage, FormsModule, DatePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen bg-white py-12">
@@ -112,47 +112,54 @@ import { AnalyticsService } from '../../services/analytics.service';
                 </div>
               </div>
 
-              <div class="border-t border-gray-200 pt-8 mb-8">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">The Scent Profile</h3>
-                <div class="p-6 sm:p-8 rounded-2xl border shadow-sm relative overflow-hidden bg-gradient-to-br" [class]="scentProfileTheme().container">
-                  <div class="absolute -right-4 -bottom-4 transform -rotate-12" [class]="scentProfileTheme().bgIcon">
-                    <mat-icon style="font-size: 140px; width: 140px; height: 140px;">water_drop</mat-icon>
-                  </div>
-                  <div class="relative z-10">
-                    <p class="text-gray-800 leading-relaxed mb-6 text-lg font-serif italic">"{{ product()?.comment }}"</p>
-                    
-                    <div class="bg-white/60 backdrop-blur-sm p-5 rounded-xl border border-white/80 mb-6">
-                      <div class="flex items-center gap-2 mb-2">
-                        <mat-icon style="font-size: 20px; width: 20px; height: 20px;" [class]="scentProfileTheme().keyNotesIcon">spa</mat-icon>
-                        <h4 class="text-xs font-bold uppercase tracking-widest" [class]="scentProfileTheme().keyNotesTitle">Key Notes</h4>
+              <div class="border-t border-gray-200 pt-6 mb-6">
+                <button (click)="toggleSection('scent')" class="w-full flex justify-between items-center text-left focus:outline-none">
+                  <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900">Fragrance Notes & Profile</h3>
+                  <mat-icon class="text-gray-400">{{ expandedSection() === 'scent' ? 'remove' : 'add' }}</mat-icon>
+                </button>
+                @if (expandedSection() === 'scent') {
+                  <div class="mt-6 animate-in slide-in-from-top-2 duration-300">
+                    <div class="p-6 sm:p-8 rounded-2xl border shadow-sm relative overflow-hidden bg-gradient-to-br" [class]="scentProfileTheme().container">
+                      <div class="absolute -right-4 -bottom-4 transform -rotate-12" [class]="scentProfileTheme().bgIcon">
+                        <mat-icon style="font-size: 140px; width: 140px; height: 140px;">water_drop</mat-icon>
                       </div>
-                      <p class="text-gray-900 font-medium text-lg">{{ product()?.keyNotes }}</p>
-                    </div>
+                      <div class="relative z-10">
+                        <p class="text-gray-800 leading-relaxed mb-6 text-lg font-serif italic">"{{ product()?.comment }}"</p>
+                        
+                        <div class="bg-white/60 backdrop-blur-sm p-5 rounded-xl border border-white/80 mb-6">
+                          <div class="flex items-center gap-2 mb-2">
+                            <mat-icon style="font-size: 20px; width: 20px; height: 20px;" [class]="scentProfileTheme().keyNotesIcon">spa</mat-icon>
+                            <h4 class="text-xs font-bold uppercase tracking-widest" [class]="scentProfileTheme().keyNotesTitle">Key Notes</h4>
+                          </div>
+                          <p class="text-gray-900 font-medium text-lg">{{ product()?.keyNotes }}</p>
+                        </div>
 
-                    <div class="grid grid-cols-2 gap-6">
-                      <div>
-                        <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Olfactory Family</h4>
-                        <p class="text-gray-900 font-medium">{{ product()?.olfactoryFamily }}</p>
-                      </div>
-                      <div>
-                        <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Perfumer</h4>
-                        <p class="text-gray-900 font-medium">{{ product()?.perfumer }}</p>
-                      </div>
-                      <div>
-                        <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Longevity</h4>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold" [class]="scentProfileTheme().longevityBadge">
-                          {{ product()?.longevity }}
-                        </span>
-                      </div>
-                      <div>
-                        <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Sillage</h4>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold" [class]="scentProfileTheme().sillageBadge">
-                          {{ product()?.sillage }}
-                        </span>
+                        <div class="grid grid-cols-2 gap-6">
+                          <div>
+                            <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Olfactory Family</h4>
+                            <p class="text-gray-900 font-medium">{{ product()?.olfactoryFamily }}</p>
+                          </div>
+                          <div>
+                            <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Perfumer</h4>
+                            <p class="text-gray-900 font-medium">{{ product()?.perfumer }}</p>
+                          </div>
+                          <div>
+                            <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Longevity</h4>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold" [class]="scentProfileTheme().longevityBadge">
+                              {{ product()?.longevity }}
+                            </span>
+                          </div>
+                          <div>
+                            <h4 class="text-xs font-bold uppercase tracking-widest mb-1" [class]="scentProfileTheme().gridTitle">Sillage</h4>
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold" [class]="scentProfileTheme().sillageBadge">
+                              {{ product()?.sillage }}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                }
               </div>
 
               <div class="border-t border-gray-200 pt-8 mb-8">
@@ -244,56 +251,70 @@ import { AnalyticsService } from '../../services/analytics.service';
                 </div>
               </div>
 
-              <div class="border-t border-gray-200 pt-8 mb-8">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">When & Where</h3>
-                <div class="bg-gradient-to-br from-sky-50 to-indigo-50 p-6 sm:p-8 rounded-2xl border border-sky-100 shadow-sm relative overflow-hidden">
-                  <div class="absolute -right-4 -bottom-4 text-sky-500/10 transform rotate-12">
-                    <mat-icon style="font-size: 140px; width: 140px; height: 140px;">explore</mat-icon>
-                  </div>
-                  <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <div class="flex items-center gap-2 mb-2">
-                        <mat-icon class="text-sky-600" style="font-size: 20px; width: 20px; height: 20px;">wb_sunny</mat-icon>
-                        <h4 class="text-xs font-bold uppercase tracking-widest text-sky-800">Season</h4>
+              <div class="border-t border-gray-200 pt-6 mb-6">
+                <button (click)="toggleSection('when')" class="w-full flex justify-between items-center text-left focus:outline-none">
+                  <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900">When & Where</h3>
+                  <mat-icon class="text-gray-400">{{ expandedSection() === 'when' ? 'remove' : 'add' }}</mat-icon>
+                </button>
+                @if (expandedSection() === 'when') {
+                  <div class="mt-6 animate-in slide-in-from-top-2 duration-300">
+                    <div class="bg-gradient-to-br from-sky-50 to-indigo-50 p-6 sm:p-8 rounded-2xl border border-sky-100 shadow-sm relative overflow-hidden">
+                      <div class="absolute -right-4 -bottom-4 text-sky-500/10 transform rotate-12">
+                        <mat-icon style="font-size: 140px; width: 140px; height: 140px;">explore</mat-icon>
                       </div>
-                      <p class="text-lg font-medium text-gray-900">{{ product()?.whenToWear }}</p>
-                    </div>
-                    <div>
-                      <div class="flex items-center gap-2 mb-2">
-                        <mat-icon class="text-indigo-500" style="font-size: 20px; width: 20px; height: 20px;">event_seat</mat-icon>
-                        <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-800">Best Occasion</h4>
+                      <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                          <div class="flex items-center gap-2 mb-2">
+                            <mat-icon class="text-sky-600" style="font-size: 20px; width: 20px; height: 20px;">wb_sunny</mat-icon>
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-sky-800">Season</h4>
+                          </div>
+                          <p class="text-lg font-medium text-gray-900">{{ product()?.whenToWear }}</p>
+                        </div>
+                        <div>
+                          <div class="flex items-center gap-2 mb-2">
+                            <mat-icon class="text-indigo-500" style="font-size: 20px; width: 20px; height: 20px;">event_seat</mat-icon>
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-indigo-800">Best Occasion</h4>
+                          </div>
+                          <p class="text-lg font-medium text-gray-900">{{ product()?.bestOccasion }}</p>
+                        </div>
                       </div>
-                      <p class="text-lg font-medium text-gray-900">{{ product()?.bestOccasion }}</p>
                     </div>
                   </div>
-                </div>
+                }
               </div>
 
-              <div class="border-t border-gray-200 pt-8 mb-8">
-                <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900 mb-4">The Persona</h3>
-                <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-6 sm:p-8 rounded-2xl border border-amber-100 shadow-sm relative overflow-hidden">
-                  <!-- Decorative background element -->
-                  <div class="absolute -right-4 -bottom-4 text-amber-500/10 transform -rotate-12">
-                    <mat-icon style="font-size: 140px; width: 140px; height: 140px;">fingerprint</mat-icon>
-                  </div>
-                  
-                  <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <div>
-                      <div class="flex items-center gap-2 mb-2">
-                        <mat-icon class="text-amber-600" style="font-size: 20px; width: 20px; height: 20px;">work_outline</mat-icon>
-                        <h4 class="text-xs font-bold uppercase tracking-widest text-amber-800">Ideal For</h4>
+              <div class="border-t border-gray-200 pt-6 mb-6">
+                <button (click)="toggleSection('persona')" class="w-full flex justify-between items-center text-left focus:outline-none">
+                  <h3 class="text-sm font-bold uppercase tracking-widest text-gray-900">The Persona</h3>
+                  <mat-icon class="text-gray-400">{{ expandedSection() === 'persona' ? 'remove' : 'add' }}</mat-icon>
+                </button>
+                @if (expandedSection() === 'persona') {
+                  <div class="mt-6 animate-in slide-in-from-top-2 duration-300">
+                    <div class="bg-gradient-to-br from-amber-50 to-orange-50 p-6 sm:p-8 rounded-2xl border border-amber-100 shadow-sm relative overflow-hidden">
+                      <!-- Decorative background element -->
+                      <div class="absolute -right-4 -bottom-4 text-amber-500/10 transform -rotate-12">
+                        <mat-icon style="font-size: 140px; width: 140px; height: 140px;">fingerprint</mat-icon>
                       </div>
-                      <p class="text-xl font-serif text-gray-900 leading-tight">{{ product()?.profession }}</p>
-                    </div>
-                    <div>
-                      <div class="flex items-center gap-2 mb-2">
-                        <mat-icon class="text-orange-500" style="font-size: 20px; width: 20px; height: 20px;">auto_awesome</mat-icon>
-                        <h4 class="text-xs font-bold uppercase tracking-widest text-orange-800">Vibe</h4>
+                      
+                      <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                        <div>
+                          <div class="flex items-center gap-2 mb-2">
+                            <mat-icon class="text-amber-600" style="font-size: 20px; width: 20px; height: 20px;">work_outline</mat-icon>
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-amber-800">Ideal For</h4>
+                          </div>
+                          <p class="text-xl font-serif text-gray-900 leading-tight">{{ product()?.profession }}</p>
+                        </div>
+                        <div>
+                          <div class="flex items-center gap-2 mb-2">
+                            <mat-icon class="text-orange-500" style="font-size: 20px; width: 20px; height: 20px;">auto_awesome</mat-icon>
+                            <h4 class="text-xs font-bold uppercase tracking-widest text-orange-800">Vibe</h4>
+                          </div>
+                          <p class="text-lg text-gray-800 font-medium leading-snug">{{ product()?.persona }}</p>
+                        </div>
                       </div>
-                      <p class="text-lg text-gray-800 font-medium leading-snug">{{ product()?.persona }}</p>
                     </div>
                   </div>
-                </div>
+                }
               </div>
 
               <div class="border-t border-gray-200 pt-8 mb-12">
@@ -400,6 +421,71 @@ import { AnalyticsService } from '../../services/analytics.service';
 
             </div>
           </div>
+
+          <!-- Reviews Section -->
+          <div class="border-t border-gray-200 pt-16 mt-16 mb-16">
+            <h2 class="text-3xl font-serif font-bold text-gray-900 mb-8">Customer Reviews</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+              <div class="lg:col-span-1">
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+                  <h3 class="text-xl font-serif font-bold mb-4">Write a Review</h3>
+                  <form (ngSubmit)="submitReview()" class="space-y-4">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                      <div class="flex gap-1">
+                        @for (star of [1, 2, 3, 4, 5]; track star) {
+                          <button type="button" (click)="setRating(star)" class="focus:outline-none">
+                            <mat-icon [class.text-gold-500]="star <= newReview.rating" [class.text-gray-300]="star > newReview.rating">star</mat-icon>
+                          </button>
+                        }
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                      <input type="text" [(ngModel)]="newReview.name" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-gold-500 focus:border-gold-500">
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Review</label>
+                      <textarea [(ngModel)]="newReview.comment" name="comment" rows="3" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-gold-500 focus:border-gold-500"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors font-medium">Submit Review</button>
+                  </form>
+                </div>
+              </div>
+              <div class="lg:col-span-2 space-y-6">
+                @if (reviews().length === 0) {
+                  <p class="text-gray-500 italic">No reviews yet. Be the first to review this fragrance!</p>
+                }
+                @for (review of reviews(); track review.date) {
+                  <div class="border-b border-gray-100 pb-6 last:border-0">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="font-bold text-gray-900">{{ review.name }}</span>
+                      <span class="text-sm text-gray-500">{{ review.date | date:'mediumDate' }}</span>
+                    </div>
+                    <div class="flex gap-1 mb-3">
+                      @for (star of [1, 2, 3, 4, 5]; track star) {
+                        <mat-icon style="font-size: 16px; width: 16px; height: 16px;" [class.text-gold-500]="star <= review.rating" [class.text-gray-300]="star > review.rating">star</mat-icon>
+                      }
+                    </div>
+                    <p class="text-gray-700">{{ review.comment }}</p>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Recently Viewed Section -->
+          @if (recentlyViewed().length > 0) {
+            <div class="border-t border-gray-200 pt-16 pb-16">
+              <h2 class="text-3xl font-serif font-bold text-gray-900 mb-8">Recently Viewed</h2>
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+                @for (rv of recentlyViewed(); track rv.id) {
+                  <app-product-card [product]="rv"></app-product-card>
+                }
+              </div>
+            </div>
+          }
+
         </div>
       } @else {
         <div class="max-w-7xl mx-auto px-4 py-24 text-center">
@@ -456,9 +542,7 @@ export class ProductDetailComponent implements OnInit {
   private router = inject(Router);
   private productService = inject(ProductService);
   private cartService = inject(CartService);
-  private analytics = inject(AnalyticsService);
-
-  private platformId = inject(PLATFORM_ID);
+  private pixelService = inject(PixelService);
 
   product = signal<Product | undefined>(undefined);
   similarProducts = signal<Product[]>([]);
@@ -501,6 +585,28 @@ export class ProductDetailComponent implements OnInit {
   isAddedToCart = signal(false);
   selectedAccord = signal<{name: string, description: string} | null>(null);
   currentVideoIndex = signal(0);
+  
+  expandedSection = signal<string | null>('scent');
+  reviews = signal<any[]>([]);
+  newReview = { name: '', rating: 5, comment: '' };
+  recentlyViewed = signal<Product[]>([]);
+
+  toggleSection(section: string) {
+    this.expandedSection.update(s => s === section ? null : section);
+  }
+
+  setRating(rating: number) {
+    this.newReview.rating = rating;
+  }
+
+  submitReview() {
+    if (!this.newReview.name || !this.newReview.comment) return;
+    const review = { ...this.newReview, date: new Date().toISOString() };
+    const updated = [review, ...this.reviews()];
+    this.reviews.set(updated);
+    localStorage.setItem(`reviews_${this.product()?.id}`, JSON.stringify(updated));
+    this.newReview = { name: '', rating: 5, comment: '' };
+  }
 
   tiktokVideos = [
     {
@@ -602,8 +708,34 @@ export class ProductDetailComponent implements OnInit {
         if (p) {
           this.product.set(p);
           this.similarProducts.set(this.productService.getSimilarProducts(p, 3));
-          this.analytics.trackViewContent(p);
           
+          // Track View Content
+          this.pixelService.trackViewContent(p);
+          
+          // Load Reviews
+          const savedReviews = localStorage.getItem(`reviews_${p.id}`);
+          if (savedReviews) {
+            this.reviews.set(JSON.parse(savedReviews));
+          } else {
+            this.reviews.set([
+              { name: 'Sarah M.', rating: 5, comment: 'Absolutely love this scent! It lasts all day.', date: new Date(Date.now() - 86400000).toISOString() },
+              { name: 'Ahmed K.', rating: 4, comment: 'Great projection, but the opening is a bit strong for me.', date: new Date(Date.now() - 172800000).toISOString() }
+            ]);
+          }
+
+          // Load Recently Viewed
+          const savedRV = localStorage.getItem('recently_viewed');
+          let rvIds: string[] = savedRV ? JSON.parse(savedRV) : [];
+          const allProducts = this.productService.getAllProducts();
+          const rvProducts = rvIds.filter(id => id !== p.id)
+            .map(id => allProducts.find(prod => prod.id === id))
+            .filter(prod => !!prod) as Product[];
+          this.recentlyViewed.set(rvProducts.slice(0, 5));
+          
+          // Update Recently Viewed
+          rvIds = [p.id, ...rvIds.filter(id => id !== p.id)].slice(0, 6);
+          localStorage.setItem('recently_viewed', JSON.stringify(rvIds));
+
           // Update SEO Title and Meta Tags
           const pageTitle = `${p.name} Impression by XPerfumes | ${p.brand}`;
           const pageDescription = `Discover our impression of ${p.name} by ${p.brand}. A ${p.olfactoryFamily} fragrance featuring ${p.keyNotes}. Shop luxury impressions at XPerfumes.`;
@@ -617,9 +749,7 @@ export class ProductDetailComponent implements OnInit {
           this.metaService.updateTag({ property: 'og:type', content: 'product' });
           
           // Scroll to top when product changes
-          if (isPlatformBrowser(this.platformId)) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
 
           // Load TikTok script if this is the Imagination product
           if (p.slug === 'louis-vuitton-imagination-impression-by-xperfumes') {
@@ -636,6 +766,7 @@ export class ProductDetailComponent implements OnInit {
     const p = this.product();
     if (p) {
       this.cartService.addToCart(p);
+      this.pixelService.trackAddToCart(p);
       this.isAddedToCart.set(true);
       setTimeout(() => {
         this.isAddedToCart.set(false);
@@ -646,18 +777,13 @@ export class ProductDetailComponent implements OnInit {
   orderViaWhatsApp() {
     const p = this.product();
     if (p) {
-      this.analytics.trackContact(p);
       const message = `Hi, I would like to order:\n\n1x ${p.name} by ${p.brand}\nPrice: ${p.impressionPrice} AED\n\nPlease let me know the next steps.`;
       const encodedMessage = encodeURIComponent(message);
-      if (isPlatformBrowser(this.platformId)) {
-        window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
-      }
+      window.open(`https://wa.me/971585328790?text=${encodedMessage}`, '_blank');
     }
   }
 
   private loadTikTokScript() {
-    if (!isPlatformBrowser(this.platformId)) return;
-
     if (!document.getElementById('tiktok-embed-script')) {
       const script = document.createElement('script');
       script.id = 'tiktok-embed-script';

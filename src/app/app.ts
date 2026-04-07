@@ -1,9 +1,8 @@
-import {ChangeDetectionStrategy, Component, inject, OnInit} from '@angular/core';
-import {RouterOutlet, Router, NavigationEnd} from '@angular/router';
+import {ChangeDetectionStrategy, Component, inject} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 import {NavbarComponent} from './components/navbar/navbar.component';
 import {FooterComponent} from './components/footer/footer.component';
-import {AnalyticsService} from './services/analytics.service';
-import {filter} from 'rxjs/operators';
+import {PixelService} from './services/pixel.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,15 +18,6 @@ import {filter} from 'rxjs/operators';
     </div>
   `,
 })
-export class App implements OnInit {
-  private router = inject(Router);
-  private analytics = inject(AnalyticsService);
-
-  ngOnInit() {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.analytics.trackPageView();
-    });
-  }
+export class App {
+  private pixelService = inject(PixelService);
 }

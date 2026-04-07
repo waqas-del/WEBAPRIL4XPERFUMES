@@ -58,6 +58,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/fragrance-guide/fragrance-guide.component').then(m => m.FragranceGuideComponent)
   },
   {
+    path: 'settings',
+    loadComponent: () => import('./pages/settings/settings.component').then(m => m.SettingsComponent)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

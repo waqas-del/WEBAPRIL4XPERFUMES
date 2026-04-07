@@ -7,7 +7,6 @@ import { ProductService } from '../../services/product.service';
 import { Product } from '../../models/product.model';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
 import { QuoteCardComponent } from '../../components/quote-card/quote-card.component';
-import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
   selector: 'app-shop',
@@ -228,32 +227,9 @@ import { AnalyticsService } from '../../services/analytics.service';
             </div>
 
             @if (isLoading()) {
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @for (i of [1, 2, 3, 4, 5, 6]; track i) {
-                  <div class="border border-gray-200 bg-white p-6 h-[280px] flex flex-col relative overflow-hidden animate-pulse">
-                    <div class="mb-4">
-                      <div class="h-3 bg-gray-200 rounded w-1/3 mb-3"></div>
-                      <div class="h-6 bg-gray-200 rounded w-3/4"></div>
-                    </div>
-                    <div class="flex-grow">
-                      <div class="flex items-center gap-2 mb-4">
-                        <div class="h-5 bg-gray-200 rounded w-16"></div>
-                        <div class="h-5 bg-gray-200 rounded w-24"></div>
-                      </div>
-                      <div class="space-y-2 mb-4">
-                        <div class="h-4 bg-gray-200 rounded w-full"></div>
-                        <div class="h-4 bg-gray-200 rounded w-5/6"></div>
-                      </div>
-                    </div>
-                    <div class="mt-auto pt-4 border-t border-gray-100 flex items-end justify-between">
-                      <div>
-                        <div class="h-3 bg-gray-200 rounded w-12 mb-2"></div>
-                        <div class="h-5 bg-gray-200 rounded w-16"></div>
-                      </div>
-                      <div class="w-8 h-8 rounded-full bg-gray-200"></div>
-                    </div>
-                  </div>
-                }
+              <div class="flex flex-col items-center justify-center py-32">
+                <mat-icon class="animate-spin text-gold-500 mb-4" style="font-size: 48px; width: 48px; height: 48px;">autorenew</mat-icon>
+                <p class="text-gray-500 font-medium text-lg">Loading collection...</p>
               </div>
             } @else if (filteredProducts().length === 0) {
               <div class="bg-white p-12 text-center border border-gray-200">
@@ -283,7 +259,6 @@ export class ShopComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private titleService = inject(Title);
   private metaService = inject(Meta);
-  private analytics = inject(AnalyticsService);
 
   allProducts = signal<Product[]>([]);
   filteredProducts = signal<Product[]>([]);
@@ -291,7 +266,6 @@ export class ShopComponent implements OnInit {
   isMobileFilterOpen = signal(false);
 
   searchQuery = '';
-  private searchTrackTimeout: ReturnType<typeof setTimeout> | undefined;
   selectedSort = 'default';
   selectedGender = 'All';
   selectedBrand = 'All';
@@ -412,13 +386,6 @@ export class ShopComponent implements OnInit {
 
     if (this.searchQuery.trim()) {
       const query = this.searchQuery.toLowerCase();
-      
-      // Track search with debounce
-      if (this.searchTrackTimeout) clearTimeout(this.searchTrackTimeout);
-      this.searchTrackTimeout = setTimeout(() => {
-        this.analytics.trackSearch(this.searchQuery);
-      }, 1500);
-
       result = result.filter(p => 
         p.name.toLowerCase().includes(query) || 
         p.brand.toLowerCase().includes(query) ||

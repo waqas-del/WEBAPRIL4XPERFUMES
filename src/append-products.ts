@@ -4,10 +4,10 @@ const bestSellers = JSON.parse(fs.readFileSync('best-sellers.json', 'utf-8'));
 let serviceCode = fs.readFileSync('src/app/services/product.service.ts', 'utf-8');
 
 // Find the end of rawProducts array
-const match = serviceCode.match(/];\n\n  private calculateImpressionPrice/);
+const match = serviceCode.match(/];\n\n {2}private calculateImpressionPrice/);
 if (match) {
   const insertIndex = match.index;
-  const newProductsStr = bestSellers.map((p: any) => JSON.stringify(p, null, 4)).join(',\n    ');
+  const newProductsStr = bestSellers.map((p: Record<string, unknown>) => JSON.stringify(p, null, 4)).join(',\n    ');
   
   serviceCode = serviceCode.slice(0, insertIndex) + ',\n    ' + newProductsStr + serviceCode.slice(insertIndex);
   fs.writeFileSync('src/app/services/product.service.ts', serviceCode);
